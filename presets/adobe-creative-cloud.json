@@ -1,0 +1,20 @@
+{
+  "format": "portshield.ruleset",
+  "version": 1,
+  "name": "Adobe – programs offline",
+  "description": "Blocks outbound traffic of Adobe desktop programs and their helpers (Photoshop, Bridge, Illustrator, Media Encoder, Acrobat, Creative Cloud Experience). Wildcards cover every installed version.",
+  "author": "PortShield",
+  "generator": "PortShield 0.0.4",
+  "rules": [
+    { "program": "%ProgramFiles%\\Adobe\\Adobe Photoshop *\\*.exe", "direction": "Outbound", "action": "Block" },
+    { "program": "%ProgramFiles%\\Adobe\\Adobe Photoshop *\\Required\\*.exe", "direction": "Outbound", "action": "Block" },
+    { "program": "%ProgramFiles%\\Adobe\\Adobe Bridge *\\*.exe", "direction": "Outbound", "action": "Block" },
+    { "program": "%ProgramFiles%\\Adobe\\Adobe Illustrator *\\Support Files\\Contents\\Windows\\*.exe", "direction": "Outbound", "action": "Block" },
+    { "program": "%ProgramFiles%\\Adobe\\Adobe Media Encoder *\\*.exe", "direction": "Outbound", "action": "Block" },
+    { "program": "%ProgramFiles%\\Adobe\\Adobe Creative Cloud Experience\\CCXProcess.exe", "direction": "Outbound", "action": "Block" },
+    { "program": "%ProgramFiles%\\Adobe\\Adobe Creative Cloud Experience\\libs\\node.exe", "direction": "Outbound", "action": "Block" },
+    { "program": "%ProgramFiles(x86)%\\Adobe\\Acrobat *\\Acrobat\\*.exe", "direction": "Outbound", "action": "Block" },
+    { "program": "%ProgramFiles%\\Adobe\\Acrobat DC\\Acrobat\\*.exe", "direction": "Outbound", "action": "Block" },
+    { "program": "%ProgramFiles(x86)%\\Adobe\\Acrobat Reader DC\\Reader\\*.exe", "direction": "Outbound", "action": "Block" }
+  ]
+}

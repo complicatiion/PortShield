@@ -1,0 +1,16 @@
+{
+  "format": "portshield.ruleset",
+  "version": 1,
+  "name": "Windows – telemetry",
+  "description": "Blocks internet access of the telemetry service (Connected User Experiences and Telemetry, DiagTrack) and the WAP push routing service – as service rules inside svchost.exe, other services are not affected – plus compatibility telemetry, device census and error reporting uploads. LAN stays reachable; Windows Update and Defender keep working.",
+  "author": "PortShield",
+  "generator": "PortShield 0.0.4",
+  "rules": [
+    { "name": "PortShield · Telemetry service (DiagTrack) · Out", "program": "%SystemRoot%\\System32\\svchost.exe", "service": "DiagTrack", "direction": "Outbound", "action": "Block", "scope": "Internet" },
+    { "name": "PortShield · WAP push routing (dmwappushservice) · Out", "program": "%SystemRoot%\\System32\\svchost.exe", "service": "dmwappushservice", "direction": "Outbound", "action": "Block", "scope": "Internet" },
+    { "program": "%SystemRoot%\\System32\\CompatTelRunner.exe", "direction": "Outbound", "action": "Block", "scope": "Internet" },
+    { "program": "%SystemRoot%\\System32\\DeviceCensus.exe", "direction": "Outbound", "action": "Block", "scope": "Internet" },
+    { "program": "%SystemRoot%\\System32\\wermgr.exe", "direction": "Outbound", "action": "Block", "scope": "Internet" },
+    { "program": "%SystemRoot%\\System32\\WerFault.exe", "direction": "Outbound", "action": "Block", "scope": "Internet" }
+  ]
+}

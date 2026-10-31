@@ -1,0 +1,12 @@
+{
+  "format": "portshield.ruleset",
+  "version": 1,
+  "name": "TechSmith Snagit – offline",
+  "description": "Blocks outbound traffic of Snagit, its editor, printer installer, crash reporters and helpers (every installed version).",
+  "author": "PortShield",
+  "generator": "PortShield 0.0.4",
+  "rules": [
+    { "program": "%ProgramFiles%\\TechSmith\\Snagit *\\*.exe", "direction": "Outbound", "action": "Block" },
+    { "program": "%ProgramFiles(x86)%\\TechSmith\\Snagit *\\*.exe", "direction": "Outbound", "action": "Block" }
+  ]
+}

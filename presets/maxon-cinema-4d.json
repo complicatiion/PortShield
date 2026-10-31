@@ -1,0 +1,14 @@
+{
+  "format": "portshield.ruleset",
+  "version": 1,
+  "name": "Maxon Cinema 4D – offline",
+  "description": "Blocks outbound traffic of every installed Cinema 4D version (R19 … R26, S22 … S26, 2023 and later) incl. Team Render, c4dpy and Commandline. The Maxon App (license sign-in) is not included.",
+  "author": "PortShield",
+  "generator": "PortShield 0.0.4",
+  "rules": [
+    { "program": "%ProgramFiles%\\Maxon Cinema 4D *\\*.exe", "direction": "Outbound", "action": "Block" },
+    { "program": "%ProgramFiles%\\Maxon\\Cinema 4D *\\*.exe", "direction": "Outbound", "action": "Block" },
+    { "program": "%ProgramFiles%\\Maxon\\Maxon Cinema 4D *\\*.exe", "direction": "Outbound", "action": "Block" },
+    { "program": "%ProgramFiles%\\Cinema 4D *\\*.exe", "direction": "Outbound", "action": "Block" }
+  ]
+}
