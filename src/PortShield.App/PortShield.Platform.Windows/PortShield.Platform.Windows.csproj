@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>PortShield.Platform.Windows</RootNamespace>
+    <AssemblyName>PortShield.Platform.Windows</AssemblyName>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <!-- Windows Firewall COM API (HNetCfg.FwPolicy2) is used late-bound through IDispatch -->
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="PortShield.Core.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PortShield.Core\PortShield.Core.csproj" />
+  </ItemGroup>
+
+</Project>
