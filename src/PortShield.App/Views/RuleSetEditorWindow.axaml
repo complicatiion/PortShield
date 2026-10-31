@@ -1,0 +1,110 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctl="using:PortShield.App.Controls"
+        x:Class="PortShield.App.Views.RuleSetEditorWindow"
+        Icon="/Assets/portshield.ico"
+        Title="{Binding Title}"
+        Width="1080" Height="720"
+        MinWidth="820" MinHeight="480"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner">
+  <DockPanel Margin="24">
+    <!-- Title -->
+    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10" Margin="0,0,0,14">
+      <PathIcon Data="{StaticResource IconBundle}" Width="22" Height="22" Foreground="{DynamicResource BrushAccentText}" />
+      <TextBlock Classes="h2" Text="{Binding Title}" />
+    </StackPanel>
+
+    <!-- Buttons: Cancel left of the main action -->
+    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right" Margin="0,14,0,0">
+      <Button Classes="fixed" Click="OnCancel" IsCancel="True">
+        <ctl:IconLabel Icon="{StaticResource IconClose}" Text="{DynamicResource BtnCancel}" />
+      </Button>
+      <Button Classes="primary fixed" Click="OnSave" IsEnabled="{Binding CanSave}">
+        <ctl:IconLabel Icon="{StaticResource IconSave}" Text="{DynamicResource BtnSave}" />
+      </Button>
+    </StackPanel>
+
+    <!-- Name and description -->
+    <Border DockPanel.Dock="Top" Classes="card" Padding="16,14" Margin="0,0,0,12">
+      <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
+        <TextBlock Classes="label" Text="{DynamicResource EditorName}" VerticalAlignment="Center" Margin="0,0,16,8" />
+        <TextBox Grid.Column="1" Text="{Binding Name}" Watermark="{DynamicResource NewRuleSetWatermark}" Margin="0,0,0,8" />
+        <TextBlock Grid.Row="1" Classes="label" Text="{DynamicResource EditorDescription}" VerticalAlignment="Center" Margin="0,0,16,0" />
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Description}" Watermark="{DynamicResource EditorDescriptionWatermark}" />
+      </Grid>
+    </Border>
+
+    <!-- Tools -->
+    <Border DockPanel.Dock="Top" Classes="commandbar" Margin="0,0,0,10">
+      <Grid ColumnDefinitions="*,Auto">
+        <WrapPanel>
+          <Button Classes="cmd" Command="{Binding AddFilesCommand}">
+            <ctl:IconLabel Icon="{StaticResource IconPlus}" Text="{DynamicResource BtnAddProgram}" />
+          </Button>
+          <Button Classes="cmd" Command="{Binding AddFolderCommand}">
+            <ctl:IconLabel Icon="{StaticResource IconFolderOpen}" Text="{DynamicResource BtnAddFolder}" />
+          </Button>
+          <Button Classes="cmd" Command="{Binding AddLineCommand}" ToolTip.Tip="{DynamicResource TipEditorPattern}">
+            <ctl:IconLabel Icon="{StaticResource IconPencil}" Text="{DynamicResource BtnAddPattern}" />
+          </Button>
+          <Border Classes="cmdsep" />
+          <Button Classes="cmd" Command="{Binding CheckCommand}">
+            <ctl:IconLabel Icon="{StaticResource IconFolderSearch}" Text="{DynamicResource BtnCheckPaths}" />
+          </Button>
+        </WrapPanel>
+        <CheckBox Grid.Column="1" Content="{DynamicResource LblRecursive}" IsChecked="{Binding IncludeSubfolders}" Margin="12,0,6,0" VerticalAlignment="Center" />
+      </Grid>
+    </Border>
+
+    <!-- Column heads -->
+    <Grid DockPanel.Dock="Top" ColumnDefinitions="*,150,150,130,170,110,40" Margin="12,0,12,6">
+      <TextBlock Classes="section column" Text="{DynamicResource EditorColPath}" />
+      <TextBlock Grid.Column="1" Classes="section column" Text="{DynamicResource EditorColService}" Margin="8,0,0,0" />
+      <TextBlock Grid.Column="2" Classes="section column" Text="{DynamicResource ColDirection}" Margin="8,0,0,0" />
+      <TextBlock Grid.Column="3" Classes="section column" Text="{DynamicResource ColAction}" Margin="8,0,0,0" />
+      <TextBlock Grid.Column="4" Classes="section column" Text="{DynamicResource ColScope}" Margin="8,0,0,0" />
+    </Grid>
+
+    <!-- Lines -->
+    <Border Classes="card" Padding="0">
+      <Panel>
+        <ScrollViewer>
+          <ItemsControl ItemsSource="{Binding Entries}" Margin="8,6">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Grid ColumnDefinitions="*,150,150,130,170,110,40" Margin="4,4">
+                  <TextBox Text="{Binding Program}" FontFamily="{DynamicResource MonoFont}" FontSize="12"
+                           Watermark="%ProgramFiles%\Vendor\App *\*.exe" />
+                  <TextBox Grid.Column="1" Text="{Binding Service}" Margin="8,0,0,0" Watermark="{DynamicResource EditorServiceWatermark}" />
+                  <ComboBox Grid.Column="2" Margin="8,0,0,0" HorizontalAlignment="Stretch" SelectedIndex="{Binding DirectionIndex}"
+                            ItemsSource="{Binding $parent[Window].DataContext.Directions}" />
+                  <ComboBox Grid.Column="3" Margin="8,0,0,0" HorizontalAlignment="Stretch" SelectedIndex="{Binding ActionIndex}"
+                            ItemsSource="{Binding $parent[Window].DataContext.Actions}" />
+                  <ComboBox Grid.Column="4" Margin="8,0,0,0" HorizontalAlignment="Stretch" SelectedIndex="{Binding ScopeIndex}"
+                            ItemsSource="{Binding $parent[Window].DataContext.Scopes}" />
+                  <Panel Grid.Column="5" Margin="8,0,0,0" VerticalAlignment="Center">
+                    <Border Classes="badge safe" IsVisible="{Binding Found}">
+                      <TextBlock Text="{Binding FoundText}" />
+                    </Border>
+                    <Border Classes="badge" IsVisible="{Binding !Found}">
+                      <TextBlock Text="{Binding FoundText}" />
+                    </Border>
+                  </Panel>
+                  <Button Grid.Column="6" Classes="icon small delete" HorizontalAlignment="Right" ToolTip.Tip="{DynamicResource BtnDelete}"
+                          Command="{Binding $parent[Window].DataContext.RemoveCommand}" CommandParameter="{Binding}">
+                    <PathIcon Data="{StaticResource IconDelete}" />
+                  </Button>
+                </Grid>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </ScrollViewer>
+        <StackPanel IsVisible="{Binding !HasEntries}" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
+          <PathIcon Data="{StaticResource IconPlaylistPlus}" Width="34" Height="34" Foreground="{DynamicResource BrushAccentText}" HorizontalAlignment="Center" />
+          <TextBlock Classes="muted" Text="{DynamicResource EditorEmpty}" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" MaxWidth="460" />
+        </StackPanel>
+      </Panel>
+    </Border>
+  </DockPanel>
+</Window>

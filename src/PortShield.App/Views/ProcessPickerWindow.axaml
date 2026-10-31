@@ -1,0 +1,66 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctl="using:PortShield.App.Controls"
+        x:Class="PortShield.App.Views.ProcessPickerWindow"
+        Icon="/Assets/portshield.ico"
+        Title="{DynamicResource ProcessPickerTitle}"
+        Width="900" Height="680"
+        MinWidth="640" MinHeight="420"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner">
+  <DockPanel Margin="24">
+    <StackPanel DockPanel.Dock="Top" Spacing="4" Margin="0,0,0,14">
+      <StackPanel Orientation="Horizontal" Spacing="10">
+        <PathIcon Data="{StaticResource IconApplication}" Width="22" Height="22" Foreground="{DynamicResource BrushAccentText}" />
+        <TextBlock Classes="h2" Text="{DynamicResource ProcessPickerTitle}" />
+      </StackPanel>
+      <TextBlock Classes="muted" Text="{DynamicResource ProcessPickerText}" TextWrapping="Wrap" />
+    </StackPanel>
+
+    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right" Margin="0,14,0,0">
+      <Button Classes="fixed" Click="OnCancel" IsCancel="True">
+        <ctl:IconLabel Icon="{StaticResource IconClose}" Text="{DynamicResource BtnCancel}" />
+      </Button>
+      <Button Classes="primary fixed" Click="OnConfirm" IsDefault="True">
+        <ctl:IconLabel Icon="{StaticResource IconCheck}" Text="{DynamicResource BtnContinue}" />
+      </Button>
+    </StackPanel>
+
+    <Grid DockPanel.Dock="Top" ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,8">
+      <TextBox Text="{Binding Search}" Watermark="{DynamicResource WatermarkFilter}" MaxWidth="360" HorizontalAlignment="Left" MinWidth="240">
+        <TextBox.InnerLeftContent>
+          <PathIcon Data="{StaticResource IconMagnify}" Width="16" Height="16" Margin="10,0,0,0" Opacity="0.7" />
+        </TextBox.InnerLeftContent>
+      </TextBox>
+      <CheckBox Grid.Column="1" Content="{DynamicResource LblHideWindows}" IsChecked="{Binding HideWindows}" Margin="0,0,12,0" VerticalAlignment="Center" />
+      <Button Grid.Column="2" Command="{Binding RefreshCommand}">
+        <ctl:IconLabel Icon="{StaticResource IconRefresh}" Text="{DynamicResource BtnRefresh}" />
+      </Button>
+    </Grid>
+
+    <Border Classes="card" Padding="0">
+      <Panel>
+        <ListBox Classes="plain" ItemsSource="{Binding Items}" Margin="4">
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <Border Classes="tablerow" Padding="10,8">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                  <CheckBox IsChecked="{Binding IsChecked}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                  <StackPanel Grid.Column="1" Spacing="2">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                      <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                      <TextBlock Classes="muted small" Text="{Binding Details}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                    </StackPanel>
+                    <TextBlock Classes="muted small mono" Text="{Binding Path}" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Path}" />
+                  </StackPanel>
+                  <TextBlock Grid.Column="2" Classes="muted small" Text="{Binding CountText}" VerticalAlignment="Center" />
+                </Grid>
+              </Border>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+        <ProgressBar IsIndeterminate="True" Width="220" IsVisible="{Binding IsLoading}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+      </Panel>
+    </Border>
+  </DockPanel>
+</Window>

@@ -1,0 +1,261 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ctl="using:PortShield.App.Controls"
+             xmlns:export="clr-namespace:PortShield.Core.Export;assembly=PortShield.Core"
+             x:Class="PortShield.App.Views.ScanView">
+
+  <UserControl.KeyBindings>
+    <KeyBinding Gesture="F5" Command="{Binding ScanCommand}" />
+    <KeyBinding Gesture="Delete" Command="{Binding DeleteCommand}" />
+    <KeyBinding Gesture="Ctrl+I" Command="{Binding InvertSelectionCommand}" />
+  </UserControl.KeyBindings>
+
+  <DockPanel>
+    <!-- Command bar -->
+    <Border DockPanel.Dock="Top" Classes="commandbar" Margin="0,0,0,12">
+      <Grid ColumnDefinitions="*,Auto">
+        <WrapPanel>
+          <Button Classes="cmd" Command="{Binding ScanCommand}" ToolTip.Tip="F5">
+            <ctl:IconLabel Icon="{StaticResource IconAnalyze}" Text="{DynamicResource BtnScan}" />
+          </Button>
+          <Border Classes="cmdsep" />
+          <Button Classes="cmd" Command="{Binding AdoptCommand}" IsEnabled="{Binding HasScanned}" ToolTip.Tip="{DynamicResource TipAdopt}">
+            <ctl:IconLabel Icon="{StaticResource IconShieldCheck}" Text="{DynamicResource BtnAdopt}" />
+          </Button>
+          <Button Classes="cmd" Command="{Binding MergeCommand}" IsEnabled="{Binding HasScanned}" ToolTip.Tip="{DynamicResource TipMerge}">
+            <ctl:IconLabel Icon="{StaticResource IconDuplicate}" Text="{DynamicResource BtnMerge}" />
+          </Button>
+          <Border Classes="cmdsep" />
+          <Button Classes="cmd" Command="{Binding EnableCommand}" IsEnabled="{Binding HasSelection}">
+            <ctl:IconLabel Icon="{StaticResource IconToggle}" Text="{DynamicResource BtnEnable}" />
+          </Button>
+          <Button Classes="cmd" Command="{Binding DisableCommand}" IsEnabled="{Binding HasSelection}">
+            <ctl:IconLabel Icon="{StaticResource IconEyeOff}" Text="{DynamicResource BtnDisable}" />
+          </Button>
+          <Button Classes="cmd delete" Command="{Binding DeleteCommand}" IsEnabled="{Binding HasSelection}">
+            <ctl:IconLabel Icon="{StaticResource IconDelete}" Text="{DynamicResource BtnDelete}" />
+          </Button>
+          <Border Classes="cmdsep" />
+          <Button Classes="cmd" IsEnabled="{Binding HasScanned}" ToolTip.Tip="{DynamicResource TipExportSelection}">
+            <ctl:IconLabel Icon="{StaticResource IconExport}" Text="{DynamicResource BtnExport}" />
+            <Button.Flyout>
+              <MenuFlyout Placement="BottomEdgeAlignedLeft">
+                <MenuItem Header="{DynamicResource FormatCsv}" Command="{Binding ExportCommand}" CommandParameter="{x:Static export:ExportFormat.Csv}">
+                  <MenuItem.Icon><PathIcon Data="{StaticResource IconCsv}" /></MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{DynamicResource FormatPortShieldJson}" Command="{Binding ExportCommand}" CommandParameter="{x:Static export:ExportFormat.PortShieldJson}">
+                  <MenuItem.Icon><PathIcon Data="{StaticResource IconBundle}" /></MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{DynamicResource FormatHtml}" Command="{Binding ExportCommand}" CommandParameter="{x:Static export:ExportFormat.Html}">
+                  <MenuItem.Icon><PathIcon Data="{StaticResource IconReport}" /></MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{DynamicResource FormatPowerShell}" Command="{Binding ExportCommand}" CommandParameter="{x:Static export:ExportFormat.PowerShell}">
+                  <MenuItem.Icon><PathIcon Data="{StaticResource IconConsole}" /></MenuItem.Icon>
+                </MenuItem>
+              </MenuFlyout>
+            </Button.Flyout>
+          </Button>
+        </WrapPanel>
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center" Margin="12,0,6,0" ToolTip.Tip="{DynamicResource TipRenameOnAdopt}">
+          <ToggleSwitch IsChecked="{Binding RenameOnAdopt}" OnContent="" OffContent="" MinWidth="0" />
+          <TextBlock Text="{DynamicResource LblRenameOnAdopt}" VerticalAlignment="Center" />
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <!-- Counters (click: filter) -->
+    <UniformGrid DockPanel.Dock="Top" Columns="6" Margin="-5,0,-5,12" IsVisible="{Binding HasScanned}">
+      <Button Classes="cardlink" Margin="5,0" Command="{Binding ShowFilterCommand}" CommandParameter="0">
+        <Border Classes="card" Padding="14,10">
+          <StackPanel>
+            <TextBlock Classes="kpi" Text="{Binding Adoptable}" Foreground="{DynamicResource BrushAccentText}" />
+            <TextBlock Classes="small" FontWeight="SemiBold" Foreground="{DynamicResource BrushAccentText}" Text="{DynamicResource ScanFilterAdoptable}" TextWrapping="Wrap" />
+          </StackPanel>
+        </Border>
+      </Button>
+      <Button Classes="cardlink" Margin="5,0" Command="{Binding ShowFilterCommand}" CommandParameter="2">
+        <Border Classes="card" Padding="14,10">
+          <StackPanel>
+            <TextBlock Classes="kpi" Text="{Binding Orphans}" Foreground="{DynamicResource BrushModerate}" />
+            <TextBlock Classes="small" FontWeight="SemiBold" Foreground="{DynamicResource BrushModerate}" Text="{DynamicResource FilterMissing}" TextWrapping="Wrap" />
+          </StackPanel>
+        </Border>
+      </Button>
+      <Button Classes="cardlink" Margin="5,0" Command="{Binding ShowFilterCommand}" CommandParameter="3">
+        <Border Classes="card" Padding="14,10">
+          <StackPanel>
+            <TextBlock Classes="kpi" Text="{Binding Duplicates}" Foreground="{DynamicResource BrushModerate}" />
+            <TextBlock Classes="small" FontWeight="SemiBold" Foreground="{DynamicResource BrushModerate}" Text="{DynamicResource FindingDuplicate}" TextWrapping="Wrap" />
+          </StackPanel>
+        </Border>
+      </Button>
+      <Button Classes="cardlink" Margin="5,0" Command="{Binding ShowFilterCommand}" CommandParameter="4">
+        <Border Classes="card" Padding="14,10">
+          <StackPanel>
+            <TextBlock Classes="kpi" Text="{Binding Conflicts}" Foreground="{DynamicResource BrushDeep}" />
+            <TextBlock Classes="small" FontWeight="SemiBold" Foreground="{DynamicResource BrushDeep}" Text="{DynamicResource FindingConflict}" TextWrapping="Wrap" />
+          </StackPanel>
+        </Border>
+      </Button>
+      <Button Classes="cardlink" Margin="5,0" Command="{Binding ShowFilterCommand}" CommandParameter="6">
+        <Border Classes="card" Padding="14,10">
+          <StackPanel>
+            <TextBlock Classes="kpi" Text="{Binding SystemRules}" Foreground="{DynamicResource BrushTextSecondary}" />
+            <TextBlock Classes="small" FontWeight="SemiBold" Foreground="{DynamicResource BrushTextSecondary}" Text="{DynamicResource OriginSystem}" TextWrapping="Wrap" />
+          </StackPanel>
+        </Border>
+      </Button>
+      <Button Classes="cardlink" Margin="5,0" Command="{Binding ShowFilterCommand}" CommandParameter="7">
+        <Border Classes="card" Padding="14,10">
+          <StackPanel>
+            <TextBlock Classes="kpi" Text="{Binding PolicyRules}" Foreground="{DynamicResource BrushInfo}" />
+            <TextBlock Classes="small" FontWeight="SemiBold" Foreground="{DynamicResource BrushInfo}" Text="{DynamicResource OriginPolicy}" TextWrapping="Wrap" />
+          </StackPanel>
+        </Border>
+      </Button>
+    </UniformGrid>
+
+    <!-- Search, filter, counters -->
+    <Grid DockPanel.Dock="Top" ColumnDefinitions="Auto,Auto,*,Auto" Margin="0,0,0,10" IsVisible="{Binding HasScanned}">
+      <TextBox Text="{Binding Search}" Watermark="{DynamicResource WatermarkSearchRules}" Width="320">
+        <TextBox.InnerLeftContent>
+          <PathIcon Data="{StaticResource IconMagnify}" Width="16" Height="16" Margin="10,0,0,0" Opacity="0.7" />
+        </TextBox.InnerLeftContent>
+      </TextBox>
+      <ComboBox Grid.Column="1" ItemsSource="{Binding Filters}" SelectedIndex="{Binding FilterIndex}" MinWidth="210" Margin="10,0" VerticalAlignment="Center" />
+      <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+        <Border Classes="pill accent" IsVisible="{Binding HasSelection}">
+          <TextBlock Text="{Binding SelectionText}" />
+        </Border>
+        <Border Classes="pill neutral">
+          <TextBlock Text="{Binding CountText}" />
+        </Border>
+      </StackPanel>
+    </Grid>
+
+    <Panel>
+      <DataGrid x:Name="ScanGrid" Classes="rules" ItemsSource="{Binding Rows}" IsVisible="{Binding HasScanned}">
+        <DataGrid.ContextMenu>
+          <ContextMenu>
+            <MenuItem Header="{DynamicResource BtnAdopt}" Command="{Binding AdoptCommand}" IsEnabled="{Binding HasSelection}">
+              <MenuItem.Icon><PathIcon Data="{StaticResource IconShieldCheck}" /></MenuItem.Icon>
+            </MenuItem>
+            <Separator />
+            <MenuItem Header="{DynamicResource BtnEnable}" Command="{Binding EnableCommand}" IsEnabled="{Binding HasSelection}">
+              <MenuItem.Icon><PathIcon Data="{StaticResource IconToggle}" /></MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="{DynamicResource BtnDisable}" Command="{Binding DisableCommand}" IsEnabled="{Binding HasSelection}">
+              <MenuItem.Icon><PathIcon Data="{StaticResource IconEyeOff}" /></MenuItem.Icon>
+            </MenuItem>
+            <Separator />
+            <MenuItem Header="{DynamicResource MenuSelectAll}" Command="{Binding SelectAllCommand}" InputGesture="Ctrl+A">
+              <MenuItem.Icon><PathIcon Data="{StaticResource IconSelectAll}" /></MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="{DynamicResource MenuInvertSelection}" Command="{Binding InvertSelectionCommand}" InputGesture="Ctrl+I">
+              <MenuItem.Icon><PathIcon Data="{StaticResource IconSwap}" /></MenuItem.Icon>
+            </MenuItem>
+            <Separator />
+            <MenuItem Header="{DynamicResource BtnDelete}" Command="{Binding DeleteCommand}" IsEnabled="{Binding HasSelection}" InputGesture="Delete">
+              <MenuItem.Icon><PathIcon Data="{StaticResource IconDelete}" Foreground="{DynamicResource BrushDeep}" /></MenuItem.Icon>
+            </MenuItem>
+          </ContextMenu>
+        </DataGrid.ContextMenu>
+        <DataGrid.Columns>
+          <DataGridTemplateColumn Width="150" SortMemberPath="OriginText">
+            <DataGridTemplateColumn.Header>
+              <TextBlock Text="{DynamicResource ColOrigin}" />
+            </DataGridTemplateColumn.Header>
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <Panel VerticalAlignment="Center">
+                  <Border Classes="badge accent" IsVisible="{Binding IsOther}">
+                    <TextBlock Text="{Binding OriginText}" />
+                  </Border>
+                  <Border Classes="badge safe" IsVisible="{Binding IsPortShield}">
+                    <TextBlock Text="{Binding OriginText}" />
+                  </Border>
+                  <Border Classes="badge" IsVisible="{Binding IsSystemOrPolicy}">
+                    <TextBlock Text="{Binding OriginText}" />
+                  </Border>
+                </Panel>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTemplateColumn Width="120" SortMemberPath="ActionText">
+            <DataGridTemplateColumn.Header>
+              <TextBlock Text="{DynamicResource ColAction}" />
+            </DataGridTemplateColumn.Header>
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <Panel VerticalAlignment="Center" Opacity="{Binding Enabled, Converter={x:Static ctl:Converters.EnabledOpacity}}">
+                  <Border Classes="badge block" IsVisible="{Binding IsBlock}">
+                    <TextBlock Text="{Binding ActionText}" />
+                  </Border>
+                  <Border Classes="badge allow" IsVisible="{Binding IsAllow}">
+                    <TextBlock Text="{Binding ActionText}" />
+                  </Border>
+                </Panel>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTextColumn Binding="{Binding DirectionText}" Width="110">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{DynamicResource ColDirection}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+          <DataGridTemplateColumn Width="2*" SortMemberPath="Name">
+            <DataGridTemplateColumn.Header>
+              <TextBlock Text="{DynamicResource ColName}" />
+            </DataGridTemplateColumn.Header>
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <StackPanel VerticalAlignment="Center" Margin="0,0,10,0" ToolTip.Tip="{Binding Tooltip}"
+                            Opacity="{Binding Enabled, Converter={x:Static ctl:Converters.EnabledOpacity}}">
+                  <TextBlock Text="{Binding Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                  <TextBlock Classes="muted small" Text="{Binding Group}" TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTemplateColumn Width="2.4*" SortMemberPath="Folder">
+            <DataGridTemplateColumn.Header>
+              <TextBlock Text="{DynamicResource ColProgram}" />
+            </DataGridTemplateColumn.Header>
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <StackPanel VerticalAlignment="Center" Margin="0,0,10,0" Opacity="{Binding Enabled, Converter={x:Static ctl:Converters.EnabledOpacity}}">
+                  <TextBlock Text="{Binding FileName}" TextTrimming="CharacterEllipsis" />
+                  <TextBlock Classes="muted small mono" Text="{Binding Folder}" TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTemplateColumn Width="1.4*" SortMemberPath="FindingsText">
+            <DataGridTemplateColumn.Header>
+              <TextBlock Text="{DynamicResource ColFindings}" />
+            </DataGridTemplateColumn.Header>
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <Border Classes="badge moderate" IsVisible="{Binding HasFindings}" VerticalAlignment="Center">
+                  <TextBlock Text="{Binding FindingsText}" TextTrimming="CharacterEllipsis" />
+                </Border>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+        </DataGrid.Columns>
+      </DataGrid>
+
+      <!-- Before the first scan -->
+      <Border Classes="card" IsVisible="{Binding NotScanned}" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="600" Padding="32,28">
+        <StackPanel Spacing="14" HorizontalAlignment="Center">
+          <PathIcon Data="{StaticResource IconAnalyze}" Width="40" Height="40" Foreground="{DynamicResource BrushAccentText}" HorizontalAlignment="Center" />
+          <TextBlock Classes="h2" Text="{DynamicResource ScanEmptyTitle}" HorizontalAlignment="Center" TextAlignment="Center" />
+          <TextBlock Classes="muted" Text="{DynamicResource ScanEmptyText}" TextWrapping="Wrap" TextAlignment="Center" />
+          <Button Classes="primary" HorizontalAlignment="Center" Command="{Binding ScanCommand}">
+            <ctl:IconLabel Icon="{StaticResource IconAnalyze}" Text="{DynamicResource BtnScan}" />
+          </Button>
+        </StackPanel>
+      </Border>
+    </Panel>
+  </DockPanel>
+</UserControl>

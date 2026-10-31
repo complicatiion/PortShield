@@ -1,0 +1,193 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ctl="using:PortShield.App.Controls"
+             x:Class="PortShield.App.Views.SettingsView">
+  <ScrollViewer>
+    <StackPanel Spacing="18" MaxWidth="980" HorizontalAlignment="Left">
+
+      <!-- General -->
+      <Border Classes="card">
+        <StackPanel Spacing="12">
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <PathIcon Data="{StaticResource IconTune}" Width="20" Height="20" Foreground="{DynamicResource BrushAccentText}" />
+            <TextBlock Classes="h2" Text="{DynamicResource HdrGeneral}" />
+          </StackPanel>
+          <Grid Classes="settings" ColumnDefinitions="*,280" RowDefinitions="Auto,Auto">
+            <TextBlock Text="{DynamicResource LblLanguage}" />
+            <ComboBox Grid.Column="1" ItemsSource="{Binding Languages}" SelectedItem="{Binding SelectedLanguage}" HorizontalAlignment="Stretch">
+              <ComboBox.ItemTemplate>
+                <DataTemplate>
+                  <StackPanel Orientation="Horizontal" Spacing="10">
+                    <Image Classes="flag" Source="{Binding Flag}" />
+                    <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+                  </StackPanel>
+                </DataTemplate>
+              </ComboBox.ItemTemplate>
+            </ComboBox>
+            <TextBlock Grid.Row="1" Text="{DynamicResource LblTheme}" />
+            <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Themes}" SelectedItem="{Binding SelectedTheme}" HorizontalAlignment="Stretch">
+              <ComboBox.ItemTemplate>
+                <DataTemplate>
+                  <TextBlock Text="{Binding Name}" />
+                </DataTemplate>
+              </ComboBox.ItemTemplate>
+            </ComboBox>
+          </Grid>
+        </StackPanel>
+      </Border>
+
+      <!-- Tray -->
+      <Border Classes="card">
+        <StackPanel Spacing="12">
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <PathIcon Data="{StaticResource IconTray}" Width="20" Height="20" Foreground="{DynamicResource BrushAccentText}" />
+            <TextBlock Classes="h2" Text="{DynamicResource HdrTray}" />
+          </StackPanel>
+          <Grid Classes="settings" ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+            <TextBlock Text="{DynamicResource LblAutostart}" TextWrapping="Wrap" />
+            <ToggleSwitch Grid.Column="1" IsChecked="{Binding Autostart}" OnContent="" OffContent="" />
+            <TextBlock Grid.Row="1" Text="{DynamicResource LblCloseToTray}" TextWrapping="Wrap" />
+            <ToggleSwitch Grid.Row="1" Grid.Column="1" IsChecked="{Binding CloseToTray}" OnContent="" OffContent="" />
+            <TextBlock Grid.Row="2" Text="{DynamicResource LblNotifications}" />
+            <ToggleSwitch Grid.Row="2" Grid.Column="1" IsChecked="{Binding Notifications}" OnContent="" OffContent="" />
+          </Grid>
+        </StackPanel>
+      </Border>
+
+      <!-- New rules -->
+      <Border Classes="card">
+        <StackPanel Spacing="12">
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <PathIcon Data="{StaticResource IconWall}" Width="20" Height="20" Foreground="{DynamicResource BrushAccentText}" />
+            <TextBlock Classes="h2" Text="{DynamicResource HdrNewRules}" />
+          </StackPanel>
+          <Grid Classes="settings" ColumnDefinitions="*,280" RowDefinitions="Auto,Auto,Auto,Auto">
+            <TextBlock Text="{DynamicResource LblDefaultDirection}" />
+            <ComboBox Grid.Column="1" ItemsSource="{Binding Directions}" SelectedIndex="{Binding DirectionIndex}" HorizontalAlignment="Stretch" />
+            <TextBlock Grid.Row="1" Text="{DynamicResource LblDefaultAction}" />
+            <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Actions}" SelectedIndex="{Binding ActionIndex}" HorizontalAlignment="Stretch" />
+            <StackPanel Grid.Row="2">
+              <TextBlock Text="{DynamicResource LblDefaultScope}" />
+              <TextBlock Classes="muted small" Text="{DynamicResource TipScopeInternet}" TextWrapping="Wrap" />
+            </StackPanel>
+            <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Scopes}" SelectedIndex="{Binding ScopeIndex}" HorizontalAlignment="Stretch" />
+            <StackPanel Grid.Row="3">
+              <TextBlock Text="{DynamicResource LblNamePrefix}" />
+              <TextBlock Classes="muted small" Text="{DynamicResource LblNamePrefixHint}" TextWrapping="Wrap" />
+            </StackPanel>
+            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding NamePrefix}" />
+          </Grid>
+          <Border Classes="divider" />
+          <Grid Classes="settings" ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+            <TextBlock Text="{DynamicResource LblRecursive}" />
+            <ToggleSwitch Grid.Column="1" IsChecked="{Binding ScanRecursive}" OnContent="" OffContent="" />
+            <StackPanel Grid.Row="1">
+              <TextBlock Text="{DynamicResource LblSkipInstallers}" />
+              <TextBlock Classes="muted small" Text="{DynamicResource LblSkipInstallersHint}" TextWrapping="Wrap" />
+            </StackPanel>
+            <ToggleSwitch Grid.Row="1" Grid.Column="1" IsChecked="{Binding SkipInstallers}" OnContent="" OffContent="" />
+          </Grid>
+        </StackPanel>
+      </Border>
+
+      <!-- Safety -->
+      <Border Classes="card">
+        <StackPanel Spacing="12">
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <PathIcon Data="{StaticResource IconShield}" Width="20" Height="20" Foreground="{DynamicResource BrushAccentText}" />
+            <TextBlock Classes="h2" Text="{DynamicResource HdrSafety}" />
+          </StackPanel>
+          <Grid Classes="settings" ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+            <StackPanel>
+              <TextBlock Text="{DynamicResource LblSnapshotBefore}" />
+              <TextBlock Classes="muted small" Text="{DynamicResource LblSnapshotBeforeHint}" TextWrapping="Wrap" />
+            </StackPanel>
+            <ToggleSwitch Grid.Column="1" IsChecked="{Binding SnapshotBeforeChanges}" OnContent="" OffContent="" />
+            <TextBlock Grid.Row="1" Text="{DynamicResource LblSnapshotKeep}" />
+            <NumericUpDown Grid.Row="1" Grid.Column="1" Value="{Binding SnapshotKeep}" Minimum="1" Maximum="500" Increment="1" FormatString="0" Width="130" HorizontalAlignment="Right" />
+            <StackPanel Grid.Row="2">
+              <TextBlock Text="{DynamicResource LblKillSwitchLan}" />
+              <TextBlock Classes="muted small" Text="{DynamicResource LblKillSwitchLanHint}" TextWrapping="Wrap" />
+            </StackPanel>
+            <ToggleSwitch Grid.Row="2" Grid.Column="1" IsChecked="{Binding KillSwitchLan}" OnContent="" OffContent="" />
+          </Grid>
+
+          <Border Classes="divider" />
+          <TextBlock Classes="h3" Text="{DynamicResource HdrProtected}" />
+          <TextBlock Classes="muted small" Text="{DynamicResource ProtectedHint}" TextWrapping="Wrap" />
+          <TextBox Text="{Binding ProtectedPaths}" AcceptsReturn="True" TextWrapping="NoWrap" MinHeight="90" FontFamily="{DynamicResource MonoFont}" FontSize="12"
+                   Watermark="C:\Program Files\VPN\vpnclient.exe" />
+          <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
+            <Button Command="{Binding AddProtectedCommand}">
+              <ctl:IconLabel Icon="{StaticResource IconPlus}" Text="{DynamicResource BtnAddProgram}" />
+            </Button>
+            <Button Classes="primary" Command="{Binding SaveProtectedCommand}">
+              <ctl:IconLabel Icon="{StaticResource IconCheck}" Text="{DynamicResource BtnSave}" />
+            </Button>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- Explorer -->
+      <Border Classes="card">
+        <StackPanel Spacing="12">
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <PathIcon Data="{StaticResource IconFolderCog}" Width="20" Height="20" Foreground="{DynamicResource BrushAccentText}" />
+            <TextBlock Classes="h2" Text="{DynamicResource HdrExplorer}" />
+          </StackPanel>
+          <Grid Classes="settings" ColumnDefinitions="*,Auto" RowDefinitions="Auto">
+            <StackPanel>
+              <TextBlock Text="{DynamicResource LblShellMenu}" />
+              <TextBlock Classes="muted small" Text="{DynamicResource LblShellMenuHint}" TextWrapping="Wrap" />
+            </StackPanel>
+            <ToggleSwitch Grid.Column="1" IsChecked="{Binding ShellMenu}" OnContent="" OffContent="" />
+          </Grid>
+        </StackPanel>
+      </Border>
+
+      <!-- Data -->
+      <Border Classes="card">
+        <StackPanel Spacing="12">
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <PathIcon Data="{StaticResource IconDatabase}" Width="20" Height="20" Foreground="{DynamicResource BrushAccentText}" />
+            <TextBlock Classes="h2" Text="{DynamicResource HdrData}" />
+          </StackPanel>
+          <Border Classes="raised" Padding="12,10" CornerRadius="8">
+            <TextBlock Classes="mono small muted" Text="{Binding DataFolder}" TextTrimming="CharacterEllipsis" />
+          </Border>
+          <WrapPanel HorizontalAlignment="Right">
+            <Button Margin="0,0,8,0" Classes="danger" Command="{Binding RemoveAllRulesCommand}">
+              <ctl:IconLabel Icon="{StaticResource IconDeleteSweep}" Text="{DynamicResource BtnRemoveAll}" />
+            </Button>
+            <Button Margin="0,0,8,0" Command="{Binding OpenSettingsFolderCommand}">
+              <ctl:IconLabel Icon="{StaticResource IconCog}" Text="{DynamicResource BtnSettingsFolder}" />
+            </Button>
+            <Button Command="{Binding OpenDataFolderCommand}">
+              <ctl:IconLabel Icon="{StaticResource IconFolderOpen}" Text="{DynamicResource BtnDataFolder}" />
+            </Button>
+          </WrapPanel>
+          <Border Classes="divider" />
+          <!-- Reset: settings only, or everything as after a fresh installation -->
+          <Grid ColumnDefinitions="*,Auto">
+            <StackPanel Spacing="2" VerticalAlignment="Center">
+              <TextBlock FontWeight="SemiBold" Text="{DynamicResource LblResetPortShield}" />
+              <TextBlock Classes="muted small" Text="{DynamicResource LblResetPortShieldHint}" TextWrapping="Wrap" />
+            </StackPanel>
+            <Button Grid.Column="1" Margin="12,0,0,0" MinWidth="200" HorizontalContentAlignment="Center" Command="{Binding ResetSettingsCommand}">
+              <ctl:IconLabel Icon="{StaticResource IconUndo}" Text="{DynamicResource BtnResetPortShield}" />
+            </Button>
+          </Grid>
+          <Grid ColumnDefinitions="*,Auto">
+            <StackPanel Spacing="2" VerticalAlignment="Center">
+              <TextBlock FontWeight="SemiBold" Text="{DynamicResource LblFactoryReset}" />
+              <TextBlock Classes="muted small" Text="{DynamicResource LblFactoryResetHint}" TextWrapping="Wrap" />
+            </StackPanel>
+            <Button Grid.Column="1" Margin="12,0,0,0" MinWidth="200" HorizontalContentAlignment="Center" Classes="danger" Command="{Binding FactoryResetCommand}">
+              <ctl:IconLabel Icon="{StaticResource IconRestore}" Text="{DynamicResource BtnFactoryReset}" />
+            </Button>
+          </Grid>
+        </StackPanel>
+      </Border>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

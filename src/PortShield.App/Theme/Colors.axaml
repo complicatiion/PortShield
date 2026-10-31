@@ -1,0 +1,161 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!--
+    PortShield design tokens. Palette: Royal Blue #536ADC (accent), Bay of Many #123178 (selection, hover, darker marks),
+    Shark #24272C (surfaces), Tuatara #393939 (borders), Silver Chalice #AFAFB0 (secondary text).
+    Dark is the default; text tokens have a contrast of at least 4.5:1 (WCAG AA), see docs/DESIGN.md.
+  -->
+  <ResourceDictionary.ThemeDictionaries>
+    <ResourceDictionary x:Key="Dark">
+      <Color x:Key="ColorBgApp">#1C1E22</Color>
+      <Color x:Key="ColorBgSidebar">#24272C</Color>
+      <Color x:Key="ColorSurfaceCard">#24272C</Color>
+      <Color x:Key="ColorSurfaceRaised">#2C2F35</Color>
+      <Color x:Key="ColorSurfaceHover">#33363D</Color>
+      <Color x:Key="ColorBorder">#393939</Color>
+      <Color x:Key="ColorAccent">#536ADC</Color>
+      <Color x:Key="ColorAccentHover">#6A7FE3</Color>
+      <Color x:Key="ColorAccentPressed">#4458C4</Color>
+      <Color x:Key="ColorAccentText">#8C9CEB</Color>
+      <Color x:Key="ColorAccentSoft">#123178</Color>
+      <Color x:Key="ColorMenuHover">#123178</Color>
+      <Color x:Key="ColorTextPrimary">#E6E6E8</Color>
+      <Color x:Key="ColorTextSecondary">#AFAFB0</Color>
+      <Color x:Key="ColorTextDisabled">#75767A</Color>
+      <Color x:Key="ColorSafe">#5CC596</Color>
+      <Color x:Key="ColorSafeSoft">#1E332A</Color>
+      <Color x:Key="ColorModerate">#E8B04A</Color>
+      <Color x:Key="ColorModerateSoft">#3A3122</Color>
+      <Color x:Key="ColorDeep">#E87A7A</Color>
+      <Color x:Key="ColorDeepSoft">#3A2427</Color>
+      <Color x:Key="ColorInfo">#8C9CEB</Color>
+      <Color x:Key="ColorInfoSoft">#1D2547</Color>
+      <Color x:Key="ColorDanger">#C93C3C</Color>
+      <Color x:Key="ColorDangerHover">#D94F4F</Color>
+      <Color x:Key="ColorDangerPressed">#A93030</Color>
+      <Color x:Key="ColorShadow">#66000000</Color>
+      <SolidColorBrush x:Key="BrushBgApp" Color="#1C1E22" />
+      <SolidColorBrush x:Key="BrushBgSidebar" Color="#24272C" />
+      <SolidColorBrush x:Key="BrushSurfaceCard" Color="#24272C" />
+      <SolidColorBrush x:Key="BrushSurfaceRaised" Color="#2C2F35" />
+      <SolidColorBrush x:Key="BrushSurfaceHover" Color="#33363D" />
+      <SolidColorBrush x:Key="BrushBorder" Color="#393939" />
+      <SolidColorBrush x:Key="BrushAccent" Color="#536ADC" />
+      <SolidColorBrush x:Key="BrushAccentHover" Color="#6A7FE3" />
+      <SolidColorBrush x:Key="BrushAccentPressed" Color="#4458C4" />
+      <SolidColorBrush x:Key="BrushAccentText" Color="#8C9CEB" />
+      <SolidColorBrush x:Key="BrushAccentSoft" Color="#123178" />
+      <SolidColorBrush x:Key="BrushMenuHover" Color="#123178" />
+      <SolidColorBrush x:Key="BrushTextPrimary" Color="#E6E6E8" />
+      <SolidColorBrush x:Key="BrushTextSecondary" Color="#AFAFB0" />
+      <SolidColorBrush x:Key="BrushTextDisabled" Color="#75767A" />
+      <SolidColorBrush x:Key="BrushSafe" Color="#5CC596" />
+      <SolidColorBrush x:Key="BrushSafeSoft" Color="#1E332A" />
+      <SolidColorBrush x:Key="BrushModerate" Color="#E8B04A" />
+      <SolidColorBrush x:Key="BrushModerateSoft" Color="#3A3122" />
+      <SolidColorBrush x:Key="BrushDeep" Color="#E87A7A" />
+      <SolidColorBrush x:Key="BrushDeepSoft" Color="#3A2427" />
+      <SolidColorBrush x:Key="BrushInfo" Color="#8C9CEB" />
+      <SolidColorBrush x:Key="BrushInfoSoft" Color="#1D2547" />
+      <SolidColorBrush x:Key="BrushDanger" Color="#C93C3C" />
+      <SolidColorBrush x:Key="BrushDangerHover" Color="#D94F4F" />
+      <SolidColorBrush x:Key="BrushDangerPressed" Color="#A93030" />
+      <SolidColorBrush x:Key="BrushShadow" Color="#66000000" />
+      <!-- DataGrid (Avalonia.Controls.DataGrid Fluent theme) in the PortShield palette -->
+      <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundBrush" Color="Transparent" />
+      <SolidColorBrush x:Key="DataGridColumnHeaderForegroundBrush" Color="#8C9CEB" />
+      <SolidColorBrush x:Key="DataGridColumnHeaderHoveredBackgroundBrush" Color="#33363D" />
+      <SolidColorBrush x:Key="DataGridColumnHeaderPressedBackgroundBrush" Color="#33363D" />
+      <SolidColorBrush x:Key="DataGridColumnHeaderDraggedBackgroundBrush" Color="#33363D" />
+      <SolidColorBrush x:Key="DataGridRowHoveredBackgroundColor" Color="#33363D" />
+      <SolidColorBrush x:Key="DataGridGridLinesBrush" Color="#393939" />
+    </ResourceDictionary>
+    <ResourceDictionary x:Key="Light">
+      <Color x:Key="ColorBgApp">#F3F4F6</Color>
+      <Color x:Key="ColorBgSidebar">#FFFFFF</Color>
+      <Color x:Key="ColorSurfaceCard">#FFFFFF</Color>
+      <Color x:Key="ColorSurfaceRaised">#F0F1F4</Color>
+      <Color x:Key="ColorSurfaceHover">#E6E8EE</Color>
+      <Color x:Key="ColorBorder">#DADCE0</Color>
+      <Color x:Key="ColorAccent">#536ADC</Color>
+      <Color x:Key="ColorAccentHover">#4458C4</Color>
+      <Color x:Key="ColorAccentPressed">#3647A6</Color>
+      <Color x:Key="ColorAccentText">#3348B8</Color>
+      <Color x:Key="ColorAccentSoft">#DCE2F8</Color>
+      <Color x:Key="ColorMenuHover">#C9D2F5</Color>
+      <Color x:Key="ColorTextPrimary">#24272C</Color>
+      <Color x:Key="ColorTextSecondary">#5A5D63</Color>
+      <Color x:Key="ColorTextDisabled">#8A8C91</Color>
+      <Color x:Key="ColorSafe">#1E7A4C</Color>
+      <Color x:Key="ColorSafeSoft">#E3F4EA</Color>
+      <Color x:Key="ColorModerate">#9A5B05</Color>
+      <Color x:Key="ColorModerateSoft">#FDF1D8</Color>
+      <Color x:Key="ColorDeep">#B42323</Color>
+      <Color x:Key="ColorDeepSoft">#FBE4E4</Color>
+      <Color x:Key="ColorInfo">#3348B8</Color>
+      <Color x:Key="ColorInfoSoft">#E4E9FA</Color>
+      <Color x:Key="ColorDanger">#C93C3C</Color>
+      <Color x:Key="ColorDangerHover">#B33030</Color>
+      <Color x:Key="ColorDangerPressed">#962727</Color>
+      <Color x:Key="ColorShadow">#22000000</Color>
+      <SolidColorBrush x:Key="BrushBgApp" Color="#F3F4F6" />
+      <SolidColorBrush x:Key="BrushBgSidebar" Color="#FFFFFF" />
+      <SolidColorBrush x:Key="BrushSurfaceCard" Color="#FFFFFF" />
+      <SolidColorBrush x:Key="BrushSurfaceRaised" Color="#F0F1F4" />
+      <SolidColorBrush x:Key="BrushSurfaceHover" Color="#E6E8EE" />
+      <SolidColorBrush x:Key="BrushBorder" Color="#DADCE0" />
+      <SolidColorBrush x:Key="BrushAccent" Color="#536ADC" />
+      <SolidColorBrush x:Key="BrushAccentHover" Color="#4458C4" />
+      <SolidColorBrush x:Key="BrushAccentPressed" Color="#3647A6" />
+      <SolidColorBrush x:Key="BrushAccentText" Color="#3348B8" />
+      <SolidColorBrush x:Key="BrushAccentSoft" Color="#DCE2F8" />
+      <SolidColorBrush x:Key="BrushMenuHover" Color="#C9D2F5" />
+      <SolidColorBrush x:Key="BrushTextPrimary" Color="#24272C" />
+      <SolidColorBrush x:Key="BrushTextSecondary" Color="#5A5D63" />
+      <SolidColorBrush x:Key="BrushTextDisabled" Color="#8A8C91" />
+      <SolidColorBrush x:Key="BrushSafe" Color="#1E7A4C" />
+      <SolidColorBrush x:Key="BrushSafeSoft" Color="#E3F4EA" />
+      <SolidColorBrush x:Key="BrushModerate" Color="#9A5B05" />
+      <SolidColorBrush x:Key="BrushModerateSoft" Color="#FDF1D8" />
+      <SolidColorBrush x:Key="BrushDeep" Color="#B42323" />
+      <SolidColorBrush x:Key="BrushDeepSoft" Color="#FBE4E4" />
+      <SolidColorBrush x:Key="BrushInfo" Color="#3348B8" />
+      <SolidColorBrush x:Key="BrushInfoSoft" Color="#E4E9FA" />
+      <SolidColorBrush x:Key="BrushDanger" Color="#C93C3C" />
+      <SolidColorBrush x:Key="BrushDangerHover" Color="#B33030" />
+      <SolidColorBrush x:Key="BrushDangerPressed" Color="#962727" />
+      <SolidColorBrush x:Key="BrushShadow" Color="#22000000" />
+      <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundBrush" Color="Transparent" />
+      <SolidColorBrush x:Key="DataGridColumnHeaderForegroundBrush" Color="#3348B8" />
+      <SolidColorBrush x:Key="DataGridColumnHeaderHoveredBackgroundBrush" Color="#E6E8EE" />
+      <SolidColorBrush x:Key="DataGridColumnHeaderPressedBackgroundBrush" Color="#E6E8EE" />
+      <SolidColorBrush x:Key="DataGridColumnHeaderDraggedBackgroundBrush" Color="#E6E8EE" />
+      <SolidColorBrush x:Key="DataGridRowHoveredBackgroundColor" Color="#E6E8EE" />
+      <SolidColorBrush x:Key="DataGridGridLinesBrush" Color="#DADCE0" />
+    </ResourceDictionary>
+  </ResourceDictionary.ThemeDictionaries>
+
+  <!-- Cancel of a running operation / destructive action: solid red (white text ≥ 4.5:1) -->
+  <SolidColorBrush x:Key="BrushCancel" Color="#C93C3C" />
+  <SolidColorBrush x:Key="BrushCancelHover" Color="#D94F4F" />
+  <SolidColorBrush x:Key="BrushCancelPressed" Color="#A93030" />
+
+  <!-- Brand gradient: progress bars, active navigation marker, logo (Bay of Many → Royal Blue) -->
+  <LinearGradientBrush x:Key="BrushBrandGradient" StartPoint="0%,0%" EndPoint="100%,0%">
+    <GradientStop Offset="0" Color="#123178" />
+    <GradientStop Offset="1" Color="#536ADC" />
+  </LinearGradientBrush>
+  <LinearGradientBrush x:Key="BrushLogoGradient" StartPoint="0%,0%" EndPoint="100%,100%">
+    <GradientStop Offset="0" Color="#7186E6" />
+    <GradientStop Offset="0.55" Color="#536ADC" />
+    <GradientStop Offset="1" Color="#2A46B0" />
+  </LinearGradientBrush>
+  <LinearGradientBrush x:Key="BrushNavMarker" StartPoint="0%,0%" EndPoint="0%,100%">
+    <GradientStop Offset="0" Color="#8C9CEB" />
+    <GradientStop Offset="1" Color="#536ADC" />
+  </LinearGradientBrush>
+
+  <FontFamily x:Key="MonoFont">Cascadia Mono, Consolas, Courier New</FontFamily>
+
+</ResourceDictionary>

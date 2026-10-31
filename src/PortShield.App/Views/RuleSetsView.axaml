@@ -1,0 +1,107 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ctl="using:PortShield.App.Controls"
+             x:Class="PortShield.App.Views.RuleSetsView">
+  <DockPanel>
+    <Border DockPanel.Dock="Top" Classes="commandbar" Margin="0,0,0,12">
+      <WrapPanel>
+        <Button Classes="cmd" Command="{Binding NewCommand}">
+          <ctl:IconLabel Icon="{StaticResource IconPlus}" Text="{DynamicResource BtnNewRuleSet}" />
+        </Button>
+        <Button Classes="cmd" Command="{Binding CreateFromRulesCommand}" ToolTip.Tip="{DynamicResource TipCreateRuleSet}">
+          <ctl:IconLabel Icon="{StaticResource IconPlaylistPlus}" Text="{DynamicResource BtnCreateRuleSet}" />
+        </Button>
+        <Button Classes="cmd" Command="{Binding ImportCommand}">
+          <ctl:IconLabel Icon="{StaticResource IconImport}" Text="{DynamicResource BtnImportRuleSet}" />
+        </Button>
+        <Border Classes="cmdsep" />
+        <Button Classes="cmd" Command="{Binding OpenFolderCommand}">
+          <ctl:IconLabel Icon="{StaticResource IconFolderOpen}" Text="{DynamicResource BtnOpenFolder}" />
+        </Button>
+        <Button Classes="cmd" Command="{Binding ReloadCommand}">
+          <ctl:IconLabel Icon="{StaticResource IconRefresh}" Text="{DynamicResource BtnRefresh}" />
+        </Button>
+      </WrapPanel>
+    </Border>
+
+    <ScrollViewer x:Name="Scroller">
+      <ItemsControl ItemsSource="{Binding Items}">
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate>
+            <!-- Columns follow the available width (3 in a normal window, more when maximized) -->
+            <UniformGrid Columns="{Binding $parent[UserControl].DataContext.Columns}" VerticalAlignment="Top" />
+          </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <Border Classes="card" Margin="0,0,14,14">
+              <DockPanel>
+                <Grid DockPanel.Dock="Top" ColumnDefinitions="Auto,*,Auto" Margin="0,0,0,8">
+                  <PathIcon Data="{StaticResource IconBundle}" Width="20" Height="20" Foreground="{DynamicResource BrushAccentText}" Margin="0,0,10,0" />
+                  <TextBlock Grid.Column="1" Classes="h3" Text="{Binding Name}" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Name}" />
+                  <Border Grid.Column="2" Classes="badge" Classes.accent="{Binding IsPreset}" Margin="8,0,0,0">
+                    <TextBlock Text="{Binding OriginText}" />
+                  </Border>
+                </Grid>
+                <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="4" HorizontalAlignment="Right" Margin="0,12,0,0">
+                  <!-- Own sets: delete the file; presets: remove from the list (a reset brings them back) -->
+                  <Button Classes="icon small delete" ToolTip.Tip="{DynamicResource BtnDelete}"
+                          Command="{Binding $parent[UserControl].DataContext.DeleteCommand}" CommandParameter="{Binding}">
+                    <PathIcon Data="{StaticResource IconDelete}" />
+                  </Button>
+                  <Button Classes="icon small" ToolTip.Tip="{DynamicResource TipShowFile}"
+                          Command="{Binding $parent[UserControl].DataContext.OpenFileCommand}" CommandParameter="{Binding}">
+                    <PathIcon Data="{StaticResource IconFolderOpen}" />
+                  </Button>
+                  <Button Classes="icon small" ToolTip.Tip="{DynamicResource BtnEdit}" IsVisible="{Binding IsOwn}"
+                          Command="{Binding $parent[UserControl].DataContext.EditCommand}" CommandParameter="{Binding}">
+                    <PathIcon Data="{StaticResource IconPencil}" />
+                  </Button>
+                  <Button Classes="icon small" ToolTip.Tip="{DynamicResource TipCopyRuleSet}"
+                          Command="{Binding $parent[UserControl].DataContext.CopyCommand}" CommandParameter="{Binding}">
+                    <PathIcon Data="{StaticResource IconCopy}" />
+                  </Button>
+                  <Button Classes="icon small" ToolTip.Tip="{DynamicResource BtnExport}"
+                          Command="{Binding $parent[UserControl].DataContext.ExportCommand}" CommandParameter="{Binding}">
+                    <PathIcon Data="{StaticResource IconExport}" />
+                  </Button>
+                  <Button Classes="icon small" ToolTip.Tip="{DynamicResource TipWatchRuleSet}"
+                          Command="{Binding $parent[UserControl].DataContext.ToggleWatchCommand}" CommandParameter="{Binding}">
+                    <Panel>
+                      <PathIcon Data="{StaticResource IconEye}" Foreground="{DynamicResource BrushAccentText}" IsVisible="{Binding IsWatched}" />
+                      <PathIcon Data="{StaticResource IconEyeOff}" IsVisible="{Binding !IsWatched}" />
+                    </Panel>
+                  </Button>
+                  <Button Classes="primary" Margin="6,0,0,0"
+                          Command="{Binding $parent[UserControl].DataContext.ApplyCommand}" CommandParameter="{Binding}">
+                    <ctl:IconLabel Icon="{StaticResource IconPlay}" Text="{DynamicResource BtnApply}" />
+                  </Button>
+                </StackPanel>
+                <StackPanel Spacing="6">
+                  <TextBlock Classes="muted small" Text="{Binding Description}" TextWrapping="Wrap" MaxHeight="64" IsVisible="{Binding HasDescription}" />
+                  <WrapPanel>
+                    <Border Margin="0,0,6,6" Classes="pill neutral">
+                      <TextBlock Text="{Binding CountText}" />
+                    </Border>
+                    <Border Margin="0,0,6,6" Classes="pill accent" IsVisible="{Binding HasMatches}">
+                      <TextBlock Text="{Binding AvailableText}" />
+                    </Border>
+                    <Border Margin="0,0,6,6" Classes="pill neutral" IsVisible="{Binding !HasMatches}">
+                      <TextBlock Text="{Binding AvailableText}" />
+                    </Border>
+                    <Border Margin="0,0,6,6" Classes="pill accent" IsVisible="{Binding IsWatched}">
+                      <StackPanel Orientation="Horizontal" Spacing="4">
+                        <PathIcon Data="{StaticResource IconEye}" Width="11" Height="11" Foreground="{DynamicResource BrushAccentText}" />
+                        <TextBlock Text="{DynamicResource PillWatched}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource BrushAccentText}" />
+                      </StackPanel>
+                    </Border>
+                  </WrapPanel>
+                </StackPanel>
+              </DockPanel>
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </ScrollViewer>
+  </DockPanel>
+</UserControl>

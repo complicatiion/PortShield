@@ -1,0 +1,41 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="PortShield.App.App"
+             Name="PortShield"
+             RequestedThemeVariant="Dark">
+
+  <Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="avares://PortShield/Theme/Colors.axaml" />
+        <ResourceInclude Source="avares://PortShield/Theme/Icons.axaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Application.Resources>
+
+  <Application.Styles>
+    <FluentTheme>
+      <FluentTheme.Palettes>
+        <!-- Royal Blue accent instead of system blue: check marks, radio buttons, selection, switches, focus -->
+        <ColorPaletteResources x:Key="Dark"
+                               Accent="#FF536ADC"
+                               RegionColor="#FF1C1E22"
+                               AltHigh="#FF1C1E22"
+                               ListLow="#FF33363D"
+                               ListMedium="#FF393939"
+                               ChromeMediumLow="#FF2C2F35"
+                               ChromeMedium="#FF33363D"
+                               ChromeLow="#FF24272C"
+                               ChromeAltLow="#FFE6E6E8"
+                               BaseHigh="#FFE6E6E8" />
+        <ColorPaletteResources x:Key="Light"
+                               Accent="#FF536ADC"
+                               RegionColor="#FFFFFFFF"
+                               BaseHigh="#FF24272C" />
+      </FluentTheme.Palettes>
+    </FluentTheme>
+    <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
+    <StyleInclude Source="avares://PortShield/Theme/Styles.axaml" />
+  </Application.Styles>
+
+</Application>

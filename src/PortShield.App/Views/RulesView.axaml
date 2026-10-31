@@ -1,0 +1,347 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ctl="using:PortShield.App.Controls"
+             xmlns:export="clr-namespace:PortShield.Core.Export;assembly=PortShield.Core"
+             x:Class="PortShield.App.Views.RulesView">
+
+  <UserControl.KeyBindings>
+    <KeyBinding Gesture="Delete" Command="{Binding DeleteCommand}" />
+    <KeyBinding Gesture="F5" Command="{Binding RefreshCommand}" />
+    <KeyBinding Gesture="F2" Command="{Binding RenameCommand}" />
+    <KeyBinding Gesture="Ctrl+B" Command="{Binding BlockCommand}" />
+    <KeyBinding Gesture="Ctrl+E" Command="{Binding EnableCommand}" />
+    <KeyBinding Gesture="Ctrl+I" Command="{Binding InvertSelectionCommand}" />
+  </UserControl.KeyBindings>
+
+  <DockPanel>
+    <!-- Command bar: every action with icon and text; the context menu of the list offers the same -->
+    <Border DockPanel.Dock="Top" Classes="commandbar" Margin="0,0,0,12">
+      <WrapPanel>
+        <Button Classes="cmd" Command="{Binding AddApplicationCommand}" ToolTip.Tip="{DynamicResource TipAddApplication}">
+          <ctl:IconLabel Icon="{StaticResource IconPlus}" Text="{DynamicResource BtnAddApplication}" />
+        </Button>
+        <Button Classes="cmd" Command="{Binding AddFolderCommand}" ToolTip.Tip="{DynamicResource TipAddFolder}">
+          <ctl:IconLabel Icon="{StaticResource IconFolderOpen}" Text="{DynamicResource BtnFolder}" />
+        </Button>
+        <Button Classes="cmd" Command="{Binding AddProcessCommand}" ToolTip.Tip="{DynamicResource TipAddProcess}">
+          <ctl:IconLabel Icon="{StaticResource IconApplication}" Text="{DynamicResource BtnProcess}" />
+        </Button>
+        <Border Classes="cmdsep" />
+        <Button Classes="cmd block" Command="{Binding BlockCommand}" IsEnabled="{Binding HasSelection}" ToolTip.Tip="Ctrl+B">
+          <ctl:IconLabel Icon="{StaticResource IconCancel}" Text="{DynamicResource BtnBlock}" />
+        </Button>
+        <Button Classes="cmd allow" Command="{Binding AllowCommand}" IsEnabled="{Binding HasSelection}">
+          <ctl:IconLabel Icon="{StaticResource IconCheckCircle}" Text="{DynamicResource BtnAllow}" />
+        </Button>
+        <Button Classes="cmd" IsEnabled="{Binding HasSelection}" ToolTip.Tip="{DynamicResource TipAllowTemporarily}">
+          <ctl:IconLabel Icon="{StaticResource IconTimerSand}" Text="{DynamicResource BtnTemporarily}" />
+          <Button.Flyout>
+            <MenuFlyout Placement="BottomEdgeAlignedLeft">
+              <MenuItem Header="{DynamicResource Minutes15}" Command="{Binding AllowTemporarilyCommand}" CommandParameter="15">
+                <MenuItem.Icon><PathIcon Data="{StaticResource IconTimerSand}" /></MenuItem.Icon>
+              </MenuItem>
+              <MenuItem Header="{DynamicResource Minutes30}" Command="{Binding AllowTemporarilyCommand}" CommandParameter="30">
+                <MenuItem.Icon><PathIcon Data="{StaticResource IconTimerSand}" /></MenuItem.Icon>
+              </MenuItem>
+              <MenuItem Header="{DynamicResource Minutes60}" Command="{Binding AllowTemporarilyCommand}" CommandParameter="60">
+                <MenuItem.Icon><PathIcon Data="{StaticResource IconTimerSand}" /></MenuItem.Icon>
+              </MenuItem>
+              <MenuItem Header="{DynamicResource Minutes120}" Command="{Binding AllowTemporarilyCommand}" CommandParameter="120">
+                <MenuItem.Icon><PathIcon Data="{StaticResource IconTimerSand}" /></MenuItem.Icon>
+              </MenuItem>
+              <Separator />
+              <MenuItem Header="{DynamicResource BtnBlockAgain}" Command="{Binding BlockAgainCommand}">
+                <MenuItem.Icon><PathIcon Data="{StaticResource IconCancel}" Foreground="{DynamicResource BrushDeep}" /></MenuItem.Icon>
+              </MenuItem>
+            </MenuFlyout>
+          </Button.Flyout>
+        </Button>
+        <Border Classes="cmdsep" />
+        <Button Classes="cmd" Command="{Binding EnableCommand}" IsEnabled="{Binding HasSelection}" ToolTip.Tip="Ctrl+E">
+          <ctl:IconLabel Icon="{StaticResource IconToggle}" Text="{DynamicResource BtnEnable}" />
+        </Button>
+        <Button Classes="cmd" Command="{Binding DisableCommand}" IsEnabled="{Binding HasSelection}">
+          <ctl:IconLabel Icon="{StaticResource IconEyeOff}" Text="{DynamicResource BtnDisable}" />
+        </Button>
+        <Button Classes="cmd delete" Command="{Binding DeleteCommand}" IsEnabled="{Binding HasSelection}" ToolTip.Tip="{DynamicResource TipDelete}">
+          <ctl:IconLabel Icon="{StaticResource IconDelete}" Text="{DynamicResource BtnDelete}" />
+        </Button>
+        <Border Classes="cmdsep" />
+        <Button Classes="cmd" ToolTip.Tip="{DynamicResource TipExportSelection}">
+          <ctl:IconLabel Icon="{StaticResource IconExport}" Text="{DynamicResource BtnExport}" />
+          <Button.Flyout>
+            <MenuFlyout Placement="BottomEdgeAlignedLeft">
+              <MenuItem Header="{DynamicResource FormatPortShieldJson}" Command="{Binding ExportCommand}" CommandParameter="{x:Static export:ExportFormat.PortShieldJson}">
+                <MenuItem.Icon><PathIcon Data="{StaticResource IconBundle}" /></MenuItem.Icon>
+              </MenuItem>
+              <MenuItem Header="{DynamicResource FormatCsv}" Command="{Binding ExportCommand}" CommandParameter="{x:Static export:ExportFormat.Csv}">
+                <MenuItem.Icon><PathIcon Data="{StaticResource IconCsv}" /></MenuItem.Icon>
+              </MenuItem>
+              <MenuItem Header="{DynamicResource FormatTextPaths}" Command="{Binding ExportCommand}" CommandParameter="{x:Static export:ExportFormat.TextPaths}">
+                <MenuItem.Icon><PathIcon Data="{StaticResource IconFormatList}" /></MenuItem.Icon>
+              </MenuItem>
+              <MenuItem Header="{DynamicResource FormatTextHashes}" Command="{Binding ExportCommand}" CommandParameter="{x:Static export:ExportFormat.TextHashes}">
+                <MenuItem.Icon><PathIcon Data="{StaticResource IconKey}" /></MenuItem.Icon>
+              </MenuItem>
+              <MenuItem Header="{DynamicResource FormatPowerShell}" Command="{Binding ExportCommand}" CommandParameter="{x:Static export:ExportFormat.PowerShell}">
+                <MenuItem.Icon><PathIcon Data="{StaticResource IconConsole}" /></MenuItem.Icon>
+              </MenuItem>
+              <MenuItem Header="{DynamicResource FormatNetsh}" Command="{Binding ExportCommand}" CommandParameter="{x:Static export:ExportFormat.Netsh}">
+                <MenuItem.Icon><PathIcon Data="{StaticResource IconConsole}" /></MenuItem.Icon>
+              </MenuItem>
+              <MenuItem Header="{DynamicResource FormatHtml}" Command="{Binding ExportCommand}" CommandParameter="{x:Static export:ExportFormat.Html}">
+                <MenuItem.Icon><PathIcon Data="{StaticResource IconReport}" /></MenuItem.Icon>
+              </MenuItem>
+              <MenuItem Header="{DynamicResource FormatMarkdown}" Command="{Binding ExportCommand}" CommandParameter="{x:Static export:ExportFormat.Markdown}">
+                <MenuItem.Icon><PathIcon Data="{StaticResource IconDocument}" /></MenuItem.Icon>
+              </MenuItem>
+              <MenuItem Header="{DynamicResource FormatXml}" Command="{Binding ExportCommand}" CommandParameter="{x:Static export:ExportFormat.Xml}">
+                <MenuItem.Icon><PathIcon Data="{StaticResource IconFileType}" /></MenuItem.Icon>
+              </MenuItem>
+            </MenuFlyout>
+          </Button.Flyout>
+        </Button>
+        <Button Classes="cmd" Command="{Binding RefreshCommand}" ToolTip.Tip="F5">
+          <ctl:IconLabel Icon="{StaticResource IconRefresh}" Text="{DynamicResource BtnRefresh}" />
+        </Button>
+      </WrapPanel>
+    </Border>
+
+    <!-- Search, filter, scope of the list, counters -->
+    <Grid DockPanel.Dock="Top" ColumnDefinitions="Auto,Auto,Auto,*,Auto" Margin="0,0,0,10">
+      <TextBox Text="{Binding Search}" Watermark="{DynamicResource WatermarkSearchRules}" Width="320">
+        <TextBox.InnerLeftContent>
+          <PathIcon Data="{StaticResource IconMagnify}" Width="16" Height="16" Margin="10,0,0,0" Opacity="0.7" />
+        </TextBox.InnerLeftContent>
+      </TextBox>
+      <ComboBox Grid.Column="1" ItemsSource="{Binding Filters}" SelectedIndex="{Binding FilterIndex}" MinWidth="170" Margin="10,0" VerticalAlignment="Center" />
+      <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center" ToolTip.Tip="{DynamicResource TipShowAll}">
+        <ToggleSwitch IsChecked="{Binding ShowAll}" OnContent="" OffContent="" MinWidth="0" />
+        <TextBlock Text="{DynamicResource LblShowAll}" VerticalAlignment="Center" />
+      </StackPanel>
+      <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+        <Border Classes="pill accent" IsVisible="{Binding HasSelection}">
+          <TextBlock Text="{Binding SelectionText}" />
+        </Border>
+        <Border Classes="pill neutral">
+          <TextBlock Text="{Binding CountText}" />
+        </Border>
+      </StackPanel>
+    </Grid>
+
+    <!-- List -->
+    <Grid>
+      <DataGrid x:Name="RulesGrid" Classes="rules" ItemsSource="{Binding Rows}">
+        <DataGrid.ContextMenu>
+          <ContextMenu>
+            <MenuItem Header="{DynamicResource BtnBlock}" Command="{Binding BlockCommand}" IsEnabled="{Binding HasSelection}" InputGesture="Ctrl+B">
+              <MenuItem.Icon><PathIcon Data="{StaticResource IconCancel}" Foreground="{DynamicResource BrushDeep}" /></MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="{DynamicResource BtnAllow}" Command="{Binding AllowCommand}" IsEnabled="{Binding HasSelection}">
+              <MenuItem.Icon><PathIcon Data="{StaticResource IconCheckCircle}" Foreground="{DynamicResource BrushSafe}" /></MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="{DynamicResource MenuAllowTemporarily}" IsEnabled="{Binding HasSelection}">
+              <MenuItem.Icon><PathIcon Data="{StaticResource IconTimerSand}" /></MenuItem.Icon>
+              <MenuItem Header="{DynamicResource Minutes15}" Command="{Binding AllowTemporarilyCommand}" CommandParameter="15">
+                <MenuItem.Icon><PathIcon Data="{StaticResource IconTimerSand}" /></MenuItem.Icon>
+              </MenuItem>
+              <MenuItem Header="{DynamicResource Minutes30}" Command="{Binding AllowTemporarilyCommand}" CommandParameter="30">
+                <MenuItem.Icon><PathIcon Data="{StaticResource IconTimerSand}" /></MenuItem.Icon>
+              </MenuItem>
+              <MenuItem Header="{DynamicResource Minutes60}" Command="{Binding AllowTemporarilyCommand}" CommandParameter="60">
+                <MenuItem.Icon><PathIcon Data="{StaticResource IconTimerSand}" /></MenuItem.Icon>
+              </MenuItem>
+              <MenuItem Header="{DynamicResource Minutes120}" Command="{Binding AllowTemporarilyCommand}" CommandParameter="120">
+                <MenuItem.Icon><PathIcon Data="{StaticResource IconTimerSand}" /></MenuItem.Icon>
+              </MenuItem>
+              <Separator />
+              <MenuItem Header="{DynamicResource BtnBlockAgain}" Command="{Binding BlockAgainCommand}">
+                <MenuItem.Icon><PathIcon Data="{StaticResource IconCancel}" Foreground="{DynamicResource BrushDeep}" /></MenuItem.Icon>
+              </MenuItem>
+            </MenuItem>
+            <MenuItem Header="{DynamicResource BtnEnable}" Command="{Binding EnableCommand}" IsEnabled="{Binding HasSelection}" InputGesture="Ctrl+E">
+              <MenuItem.Icon><PathIcon Data="{StaticResource IconToggle}" /></MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="{DynamicResource BtnDisable}" Command="{Binding DisableCommand}" IsEnabled="{Binding HasSelection}">
+              <MenuItem.Icon><PathIcon Data="{StaticResource IconEyeOff}" /></MenuItem.Icon>
+            </MenuItem>
+            <Separator />
+            <MenuItem Header="{DynamicResource MenuScope}" IsEnabled="{Binding HasSelection}">
+              <MenuItem.Icon><PathIcon Data="{StaticResource IconEarth}" /></MenuItem.Icon>
+              <MenuItem Header="{DynamicResource ScopeAllLong}" Command="{Binding ScopeAllCommand}">
+                <MenuItem.Icon><PathIcon Data="{StaticResource IconAll}" /></MenuItem.Icon>
+              </MenuItem>
+              <MenuItem Header="{DynamicResource ScopeInternetLong}" Command="{Binding ScopeInternetCommand}">
+                <MenuItem.Icon><PathIcon Data="{StaticResource IconEarth}" /></MenuItem.Icon>
+              </MenuItem>
+            </MenuItem>
+            <MenuItem Header="{DynamicResource MenuProfiles}" IsEnabled="{Binding HasSelection}">
+              <MenuItem.Icon><PathIcon Data="{StaticResource IconLan}" /></MenuItem.Icon>
+              <MenuItem Header="{DynamicResource ProfilesAll}" Command="{Binding ProfilesAllCommand}">
+                <MenuItem.Icon><PathIcon Data="{StaticResource IconAll}" /></MenuItem.Icon>
+              </MenuItem>
+              <MenuItem Header="{DynamicResource ProfilesPublicOnly}" Command="{Binding ProfilesPublicCommand}">
+                <MenuItem.Icon><PathIcon Data="{StaticResource IconEarth}" /></MenuItem.Icon>
+              </MenuItem>
+              <MenuItem Header="{DynamicResource ProfilesPrivateDomain}" Command="{Binding ProfilesPrivateDomainCommand}">
+                <MenuItem.Icon><PathIcon Data="{StaticResource IconLan}" /></MenuItem.Icon>
+              </MenuItem>
+            </MenuItem>
+            <MenuItem Header="{DynamicResource BtnRename}" Command="{Binding RenameCommand}" IsEnabled="{Binding HasSingleSelection}" InputGesture="F2">
+              <MenuItem.Icon><PathIcon Data="{StaticResource IconPencil}" /></MenuItem.Icon>
+            </MenuItem>
+            <Separator />
+            <MenuItem Header="{DynamicResource MenuCopyPath}" Command="{Binding CopyPathCommand}" IsEnabled="{Binding HasSelection}">
+              <MenuItem.Icon><PathIcon Data="{StaticResource IconCopy}" /></MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="{DynamicResource MenuOpenLocation}" Command="{Binding OpenLocationCommand}" IsEnabled="{Binding HasSelection}">
+              <MenuItem.Icon><PathIcon Data="{StaticResource IconFolderOpen}" /></MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="{DynamicResource MenuProperties}" Command="{Binding PropertiesCommand}" IsEnabled="{Binding HasSelection}">
+              <MenuItem.Icon><PathIcon Data="{StaticResource IconInfo}" /></MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="{DynamicResource MenuRunProgram}" Command="{Binding RunProgramCommand}" IsEnabled="{Binding HasSelection}">
+              <MenuItem.Icon><PathIcon Data="{StaticResource IconPlay}" /></MenuItem.Icon>
+            </MenuItem>
+            <Separator />
+            <MenuItem Header="{DynamicResource MenuSelectAll}" Command="{Binding SelectAllCommand}" InputGesture="Ctrl+A">
+              <MenuItem.Icon><PathIcon Data="{StaticResource IconSelectAll}" /></MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="{DynamicResource MenuInvertSelection}" Command="{Binding InvertSelectionCommand}" InputGesture="Ctrl+I">
+              <MenuItem.Icon><PathIcon Data="{StaticResource IconSwap}" /></MenuItem.Icon>
+            </MenuItem>
+            <Separator />
+            <MenuItem Header="{DynamicResource BtnDelete}" Command="{Binding DeleteCommand}" IsEnabled="{Binding HasSelection}" InputGesture="Delete">
+              <MenuItem.Icon><PathIcon Data="{StaticResource IconDelete}" Foreground="{DynamicResource BrushDeep}" /></MenuItem.Icon>
+            </MenuItem>
+          </ContextMenu>
+        </DataGrid.ContextMenu>
+
+        <DataGrid.Columns>
+          <DataGridTemplateColumn Width="128" SortMemberPath="ActionText">
+            <DataGridTemplateColumn.Header>
+              <TextBlock Text="{DynamicResource ColAction}" />
+            </DataGridTemplateColumn.Header>
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <Panel VerticalAlignment="Center" Opacity="{Binding Enabled, Converter={x:Static ctl:Converters.EnabledOpacity}}">
+                  <Border Classes="badge block" IsVisible="{Binding IsBlock}">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                      <PathIcon Data="{StaticResource IconCancel}" Width="12" Height="12" />
+                      <TextBlock Text="{Binding ActionText}" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource BrushDeep}" />
+                    </StackPanel>
+                  </Border>
+                  <Border Classes="badge allow" IsVisible="{Binding IsAllow}">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                      <PathIcon Data="{StaticResource IconCheckCircle}" Width="12" Height="12" />
+                      <TextBlock Text="{Binding ActionText}" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource BrushSafe}" />
+                    </StackPanel>
+                  </Border>
+                </Panel>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+
+          <DataGridTemplateColumn Width="2*" SortMemberPath="Name">
+            <DataGridTemplateColumn.Header>
+              <TextBlock Text="{DynamicResource ColName}" />
+            </DataGridTemplateColumn.Header>
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <StackPanel VerticalAlignment="Center" Margin="0,0,10,0" ToolTip.Tip="{Binding Tooltip}"
+                            Opacity="{Binding Enabled, Converter={x:Static ctl:Converters.EnabledOpacity}}">
+                  <TextBlock Text="{Binding Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                  <StackPanel Orientation="Horizontal" Spacing="6">
+                    <TextBlock Classes="muted small" Text="{Binding OriginText}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                    <StackPanel Orientation="Horizontal" Spacing="4" IsVisible="{Binding IsTemporary}" VerticalAlignment="Center">
+                      <PathIcon Data="{StaticResource IconTimerSand}" Width="11" Height="11" Foreground="{DynamicResource BrushModerate}" />
+                      <TextBlock Classes="small" FontWeight="SemiBold" Foreground="{DynamicResource BrushModerate}" Text="{Binding TemporaryText}" />
+                    </StackPanel>
+                  </StackPanel>
+                </StackPanel>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+
+          <DataGridTemplateColumn Width="2.6*" SortMemberPath="ExpandedProgram">
+            <DataGridTemplateColumn.Header>
+              <TextBlock Text="{DynamicResource ColProgram}" />
+            </DataGridTemplateColumn.Header>
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center" Margin="0,0,10,0" ToolTip.Tip="{Binding ExpandedProgram}"
+                      Opacity="{Binding Enabled, Converter={x:Static ctl:Converters.EnabledOpacity}}">
+                  <StackPanel>
+                    <TextBlock Text="{Binding FileName}" TextTrimming="CharacterEllipsis" />
+                    <TextBlock Classes="muted small mono" Text="{Binding Folder}" TextTrimming="CharacterEllipsis" />
+                  </StackPanel>
+                  <Border Grid.Column="1" Classes="badge deep" Margin="8,0,0,0" IsVisible="{Binding IsMissing}" ToolTip.Tip="{DynamicResource TipMissing}">
+                    <TextBlock Text="{DynamicResource BadgeMissing}" />
+                  </Border>
+                </Grid>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+
+          <DataGridTemplateColumn Width="140" SortMemberPath="ScopeText">
+            <DataGridTemplateColumn.Header>
+              <TextBlock Text="{DynamicResource ColScope}" />
+            </DataGridTemplateColumn.Header>
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <Border Classes="badge" Classes.accent="{Binding IsInternetScope}" VerticalAlignment="Center" ToolTip.Tip="{Binding ScopeTip}"
+                        Opacity="{Binding Enabled, Converter={x:Static ctl:Converters.EnabledOpacity}}">
+                  <TextBlock Text="{Binding ScopeText}" />
+                </Border>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+
+          <DataGridTextColumn Binding="{Binding ProfilesText}" Width="130">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{DynamicResource ColProfiles}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+
+          <DataGridTemplateColumn Width="96" SortMemberPath="EnabledText">
+            <DataGridTemplateColumn.Header>
+              <TextBlock Text="{DynamicResource ColEnabled}" />
+            </DataGridTemplateColumn.Header>
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                  <PathIcon Data="{StaticResource IconCheck}" Width="14" Height="14" Foreground="{DynamicResource BrushAccentText}" IsVisible="{Binding Enabled}" />
+                  <PathIcon Data="{StaticResource IconMinus}" Width="14" Height="14" Foreground="{DynamicResource BrushTextDisabled}" IsVisible="{Binding !Enabled}" />
+                  <TextBlock Text="{Binding EnabledText}" VerticalAlignment="Center" />
+                </StackPanel>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+
+          <DataGridTextColumn Binding="{Binding Publisher}" Width="1.3*">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{DynamicResource ColPublisher}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+        </DataGrid.Columns>
+      </DataGrid>
+
+      <!-- Empty list -->
+      <Border Classes="card" IsVisible="{Binding IsEmpty}" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="560" Padding="32,28">
+        <StackPanel Spacing="14" HorizontalAlignment="Center">
+          <PathIcon Data="{StaticResource IconWall}" Width="40" Height="40" Foreground="{DynamicResource BrushAccentText}" HorizontalAlignment="Center" />
+          <TextBlock Classes="h2" Text="{DynamicResource EmptyRulesTitle}" HorizontalAlignment="Center" TextAlignment="Center" />
+          <TextBlock Classes="muted" Text="{DynamicResource EmptyRulesText}" TextWrapping="Wrap" TextAlignment="Center" />
+          <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+            <Button Command="{Binding AddFolderCommand}">
+              <ctl:IconLabel Icon="{StaticResource IconFolderOpen}" Text="{DynamicResource BtnAddFolder}" />
+            </Button>
+            <Button Classes="primary" Command="{Binding AddApplicationCommand}">
+              <ctl:IconLabel Icon="{StaticResource IconPlus}" Text="{DynamicResource BtnAddApplication}" />
+            </Button>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+    </Grid>
+  </DockPanel>
+</UserControl>

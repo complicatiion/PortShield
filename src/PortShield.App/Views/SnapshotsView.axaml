@@ -1,0 +1,89 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ctl="using:PortShield.App.Controls"
+             x:Class="PortShield.App.Views.SnapshotsView">
+  <DockPanel>
+    <Border DockPanel.Dock="Top" Classes="commandbar" Margin="0,0,0,12">
+      <WrapPanel>
+        <Button Classes="cmd" Command="{Binding CreateCommand}">
+          <ctl:IconLabel Icon="{StaticResource IconBackup}" Text="{DynamicResource BtnSnapshot}" />
+        </Button>
+        <Border Classes="cmdsep" />
+        <Button Classes="cmd" Command="{Binding OpenFolderCommand}">
+          <ctl:IconLabel Icon="{StaticResource IconFolderOpen}" Text="{DynamicResource BtnOpenFolder}" />
+        </Button>
+        <Button Classes="cmd" Command="{Binding RefreshCommand}">
+          <ctl:IconLabel Icon="{StaticResource IconRefresh}" Text="{DynamicResource BtnRefresh}" />
+        </Button>
+      </WrapPanel>
+    </Border>
+
+    <Panel>
+      <DataGrid ItemsSource="{Binding Items}" IsVisible="{Binding HasItems}">
+        <DataGrid.Columns>
+          <DataGridTextColumn Binding="{Binding DateText}" Width="170" SortMemberPath="Info.Created">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{DynamicResource ColDate}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+          <DataGridTemplateColumn Width="1.4*" SortMemberPath="ReasonText">
+            <DataGridTemplateColumn.Header>
+              <TextBlock Text="{DynamicResource ColReason}" />
+            </DataGridTemplateColumn.Header>
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <StackPanel VerticalAlignment="Center">
+                  <TextBlock Text="{Binding ReasonText}" FontWeight="SemiBold" />
+                  <TextBlock Classes="muted small" Text="{Binding Note}" TextTrimming="CharacterEllipsis" IsVisible="{Binding HasNote}" />
+                </StackPanel>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTextColumn Binding="{Binding RulesText}" Width="1.4*">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{DynamicResource ColContent}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+          <DataGridTemplateColumn Width="230" CanUserSort="False" CanUserReorder="False">
+            <DataGridTemplateColumn.Header>
+              <TextBlock Text="{DynamicResource ColActions}" />
+            </DataGridTemplateColumn.Header>
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <StackPanel Orientation="Horizontal" Spacing="2" HorizontalAlignment="Right" VerticalAlignment="Center">
+                  <Button Classes="icon small" ToolTip.Tip="{DynamicResource BtnOpenFolder}"
+                          Command="{Binding $parent[UserControl].DataContext.OpenSnapshotCommand}" CommandParameter="{Binding}">
+                    <PathIcon Data="{StaticResource IconFolderOpen}" />
+                  </Button>
+                  <Button Classes="icon small delete" ToolTip.Tip="{DynamicResource BtnDelete}"
+                          Command="{Binding $parent[UserControl].DataContext.DeleteCommand}" CommandParameter="{Binding}">
+                    <PathIcon Data="{StaticResource IconDelete}" />
+                  </Button>
+                  <Button Classes="icon small highlight" ToolTip.Tip="{DynamicResource BtnRestorePolicy}" IsEnabled="{Binding HasPolicy}"
+                          Command="{Binding $parent[UserControl].DataContext.RestorePolicyCommand}" CommandParameter="{Binding}">
+                    <PathIcon Data="{StaticResource IconBackupRestore}" />
+                  </Button>
+                  <Button Classes="icon small restore" ToolTip.Tip="{DynamicResource TipRestoreRules}" IsEnabled="{Binding HasRules}"
+                          Command="{Binding $parent[UserControl].DataContext.RestoreRulesCommand}" CommandParameter="{Binding}">
+                    <PathIcon Data="{StaticResource IconRestore}" />
+                  </Button>
+                </StackPanel>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+        </DataGrid.Columns>
+      </DataGrid>
+
+      <Border Classes="card" IsVisible="{Binding IsEmpty}" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="520" Padding="32,28">
+        <StackPanel Spacing="12" HorizontalAlignment="Center">
+          <PathIcon Data="{StaticResource IconBackupRestore}" Width="40" Height="40" Foreground="{DynamicResource BrushAccentText}" HorizontalAlignment="Center" />
+          <TextBlock Classes="h2" Text="{DynamicResource EmptySnapshotsTitle}" HorizontalAlignment="Center" />
+          <TextBlock Classes="muted" Text="{DynamicResource EmptySnapshotsText}" TextWrapping="Wrap" TextAlignment="Center" />
+          <Button Classes="primary" HorizontalAlignment="Center" Command="{Binding CreateCommand}">
+            <ctl:IconLabel Icon="{StaticResource IconBackup}" Text="{DynamicResource BtnSnapshot}" />
+          </Button>
+        </StackPanel>
+      </Border>
+    </Panel>
+  </DockPanel>
+</UserControl>

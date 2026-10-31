@@ -1,0 +1,159 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctl="using:PortShield.App.Controls"
+        x:Class="PortShield.App.Views.AddRulesWindow"
+        Icon="/Assets/portshield.ico"
+        Title="{Binding Title}"
+        Width="1040" Height="760"
+        MinWidth="760" MinHeight="520"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner">
+  <DockPanel Margin="24">
+    <!-- Title -->
+    <StackPanel DockPanel.Dock="Top" Spacing="4" Margin="0,0,0,14">
+      <StackPanel Orientation="Horizontal" Spacing="10">
+        <PathIcon Data="{StaticResource IconWall}" Width="22" Height="22" Foreground="{DynamicResource BrushAccentText}" />
+        <TextBlock Classes="h2" Text="{Binding Title}" />
+      </StackPanel>
+      <TextBlock Classes="muted small mono" Text="{Binding Subtitle}" IsVisible="{Binding HasSubtitle}" TextWrapping="Wrap" />
+    </StackPanel>
+
+    <!-- Buttons: Cancel left of the main action, both right -->
+    <Grid DockPanel.Dock="Bottom" ColumnDefinitions="*,Auto" Margin="0,14,0,0">
+      <TextBlock Classes="muted" Text="{Binding Summary}" VerticalAlignment="Center" TextWrapping="Wrap" />
+      <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+        <Button Classes="fixed" Click="OnCancel" IsCancel="True">
+          <ctl:IconLabel Icon="{StaticResource IconClose}" Text="{DynamicResource BtnCancel}" />
+        </Button>
+        <Button Classes="primary fixed" Click="OnConfirm" IsEnabled="{Binding CanConfirm}">
+          <ctl:IconLabel Icon="{StaticResource IconCheck}" Text="{DynamicResource BtnCreateRules}" />
+        </Button>
+      </StackPanel>
+    </Grid>
+
+    <!-- Options (plain path lists only; rule sets bring their own) -->
+    <Border DockPanel.Dock="Top" Classes="card" Padding="16,14" Margin="0,0,0,12" IsVisible="{Binding UsesOptions}">
+      <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+        <TextBlock Classes="label" Text="{DynamicResource LblDirection}" VerticalAlignment="Center" Margin="0,0,16,8" />
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,8">
+          <RadioButton Classes="segment" GroupName="dir" IsChecked="{Binding DirectionOut}">
+            <ctl:IconLabel Icon="{StaticResource IconArrowOut}" Text="{DynamicResource DirOut}" />
+          </RadioButton>
+          <RadioButton Classes="segment" GroupName="dir" IsChecked="{Binding DirectionIn}">
+            <ctl:IconLabel Icon="{StaticResource IconArrowIn}" Text="{DynamicResource DirIn}" />
+          </RadioButton>
+          <RadioButton Classes="segment" GroupName="dir" IsChecked="{Binding DirectionBoth}">
+            <ctl:IconLabel Icon="{StaticResource IconBothWays}" Text="{DynamicResource DirBoth}" />
+          </RadioButton>
+        </StackPanel>
+
+        <TextBlock Grid.Row="1" Classes="label" Text="{DynamicResource LblAction}" VerticalAlignment="Center" Margin="0,0,16,8" />
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,8">
+          <RadioButton Classes="segment" GroupName="action" IsChecked="{Binding ActionBlock}">
+            <ctl:IconLabel Icon="{StaticResource IconCancel}" Text="{DynamicResource ActionBlock}" />
+          </RadioButton>
+          <RadioButton Classes="segment" GroupName="action" IsChecked="{Binding ActionAllow}">
+            <ctl:IconLabel Icon="{StaticResource IconCheckCircle}" Text="{DynamicResource ActionAllow}" />
+          </RadioButton>
+        </StackPanel>
+
+        <TextBlock Grid.Row="2" Classes="label" Text="{DynamicResource LblScope}" VerticalAlignment="Center" Margin="0,0,16,8" />
+        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,8">
+          <RadioButton Classes="segment" GroupName="scope" IsChecked="{Binding ScopeAll}" ToolTip.Tip="{DynamicResource TipScopeAll}">
+            <ctl:IconLabel Icon="{StaticResource IconAll}" Text="{DynamicResource ScopeAllLong}" />
+          </RadioButton>
+          <RadioButton Classes="segment" GroupName="scope" IsChecked="{Binding ScopeInternet}" ToolTip.Tip="{DynamicResource TipScopeInternet}">
+            <ctl:IconLabel Icon="{StaticResource IconEarth}" Text="{DynamicResource ScopeInternetLong}" />
+          </RadioButton>
+        </StackPanel>
+
+        <TextBlock Grid.Row="3" Classes="label" Text="{DynamicResource LblProfiles}" VerticalAlignment="Center" Margin="0,0,16,0" />
+        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Spacing="16">
+          <CheckBox Content="{DynamicResource ProfileDomain}" IsChecked="{Binding ProfileDomain}" />
+          <CheckBox Content="{DynamicResource ProfilePrivate}" IsChecked="{Binding ProfilePrivate}" />
+          <CheckBox Content="{DynamicResource ProfilePublic}" IsChecked="{Binding ProfilePublic}" />
+          <Border Classes="divider" Width="1" Height="20" Margin="4,0" />
+          <CheckBox Content="{DynamicResource LblEnableRules}" IsChecked="{Binding EnableRules}" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="16" Margin="0,10,0,0" IsVisible="{Binding IsFolder}">
+          <PathIcon Data="{StaticResource IconFolderSearch}" Width="16" Height="16" Foreground="{DynamicResource BrushAccentText}" />
+          <CheckBox Content="{DynamicResource LblRecursive}" IsChecked="{Binding Recursive}" />
+          <CheckBox Content="{DynamicResource LblSkipInstallers}" IsChecked="{Binding SkipInstallers}" />
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <!-- List tools -->
+    <Grid DockPanel.Dock="Top" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
+      <TextBox Text="{Binding Search}" Watermark="{DynamicResource WatermarkFilter}" MaxWidth="360" HorizontalAlignment="Left" MinWidth="240">
+        <TextBox.InnerLeftContent>
+          <PathIcon Data="{StaticResource IconMagnify}" Width="16" Height="16" Margin="10,0,0,0" Opacity="0.7" />
+        </TextBox.InnerLeftContent>
+      </TextBox>
+      <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
+        <Button Classes="square" Command="{Binding CheckAllCommand}" ToolTip.Tip="{DynamicResource TipSelectAll}">
+          <PathIcon Data="{StaticResource IconCheck}" />
+        </Button>
+        <Button Classes="square" Command="{Binding CheckNoneCommand}" ToolTip.Tip="{DynamicResource TipSelectNone}">
+          <PathIcon Data="{StaticResource IconSelectNone}" />
+        </Button>
+      </StackPanel>
+    </Grid>
+
+    <!-- Programs -->
+    <Border Classes="card" Padding="0">
+      <Panel>
+        <ListBox Classes="plain" ItemsSource="{Binding VisibleItems}" Margin="4">
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <Border Classes="tablerow" Padding="10,8">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                  <CheckBox IsChecked="{Binding IsChecked}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                  <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                      <TextBlock Text="{Binding FileName}" FontWeight="SemiBold" />
+                      <TextBlock Classes="muted small" Text="{Binding Details}" IsVisible="{Binding HasDetails}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                    </StackPanel>
+                    <TextBlock Classes="muted small mono" Text="{Binding Folder}" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Path}" />
+                    <StackPanel Orientation="Horizontal" Spacing="6" IsVisible="{Binding HasWarning}">
+                      <PathIcon Data="{StaticResource IconAlert}" Width="13" Height="13" Foreground="{DynamicResource BrushModerate}" />
+                      <TextBlock Classes="small warning" Text="{Binding Warning}" TextWrapping="Wrap" />
+                    </StackPanel>
+                  </StackPanel>
+                  <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                    <Border Classes="badge" IsVisible="{Binding HasDefinition}">
+                      <TextBlock Text="{Binding DirectionText}" />
+                    </Border>
+                    <Border Classes="badge block" IsVisible="{Binding IsBlock}">
+                      <TextBlock Text="{Binding ActionText}" />
+                    </Border>
+                    <Border Classes="badge allow" IsVisible="{Binding IsAllow}">
+                      <TextBlock Text="{Binding ActionText}" />
+                    </Border>
+                    <Border Classes="badge accent" IsVisible="{Binding IsNew}">
+                      <TextBlock Text="{Binding StatusText}" />
+                    </Border>
+                    <Border Classes="badge moderate" IsVisible="{Binding IsUpdate}">
+                      <TextBlock Text="{Binding StatusText}" />
+                    </Border>
+                    <Border Classes="badge safe" IsVisible="{Binding IsSame}">
+                      <TextBlock Text="{Binding StatusText}" />
+                    </Border>
+                    <Border Classes="badge" IsVisible="{Binding IsSkipped}">
+                      <TextBlock Text="{Binding StatusText}" />
+                    </Border>
+                  </StackPanel>
+                </Grid>
+              </Border>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+        <StackPanel IsVisible="{Binding IsLoading}" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
+          <ProgressBar IsIndeterminate="True" Width="220" />
+          <TextBlock Classes="muted" Text="{DynamicResource StatusReadingPrograms}" HorizontalAlignment="Center" />
+        </StackPanel>
+      </Panel>
+    </Border>
+  </DockPanel>
+</Window>

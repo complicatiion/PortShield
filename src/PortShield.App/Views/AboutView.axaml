@@ -1,0 +1,144 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ctl="using:PortShield.App.Controls"
+             x:Class="PortShield.App.Views.AboutView">
+  <ScrollViewer>
+    <StackPanel Spacing="20" MaxWidth="1040" HorizontalAlignment="Left">
+
+      <!-- Product -->
+      <Border Classes="card" Padding="28">
+        <StackPanel Spacing="18">
+        <Grid ColumnDefinitions="Auto,*">
+          <!-- App icon (as in the taskbar): white logo on the gradient tile -->
+          <Image Source="/Assets/logo.png" Width="88" Height="88" VerticalAlignment="Top" Margin="4,4,28,0"
+                 RenderOptions.BitmapInterpolationMode="HighQuality" />
+          <StackPanel Grid.Column="1" Spacing="8">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+              <TextBlock Text="PortShield" FontSize="30" FontWeight="Bold" />
+              <Border Classes="badge" VerticalAlignment="Center">
+                <TextBlock Text="{Binding Version}" Classes="small" />
+              </Border>
+            </StackPanel>
+            <TextBlock Text="{DynamicResource AboutTagline}" Classes="h3" TextWrapping="Wrap" />
+            <TextBlock Text="{DynamicResource AboutText}" Classes="muted" TextWrapping="Wrap" />
+            <TextBlock Text="{Binding Copyright}" Classes="small" Foreground="{DynamicResource BrushAccentText}" Margin="0,6,0,0" />
+          </StackPanel>
+        </Grid>
+        <WrapPanel HorizontalAlignment="Center">
+          <Button Margin="4" Command="{Binding OpenProjectCommand}">
+            <ctl:IconLabel Icon="{StaticResource IconOpenInNew}" Text="{DynamicResource BtnProjectPage}" />
+          </Button>
+          <Button Margin="4" Command="{Binding OpenWebsiteCommand}">
+            <ctl:IconLabel Icon="{StaticResource IconEarth}" Text="sksdesign.de" />
+          </Button>
+        </WrapPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- License -->
+      <Border Classes="card">
+        <StackPanel Spacing="14">
+          <Grid ColumnDefinitions="Auto,*,Auto">
+            <PathIcon Data="{StaticResource IconShield}" Width="22" Height="22" Foreground="{DynamicResource BrushAccentText}" Margin="0,0,10,0" />
+            <TextBlock Grid.Column="1" Classes="h2" Text="{DynamicResource HdrLicense}" VerticalAlignment="Center" />
+            <Border Grid.Column="2" Classes="pill" Background="{DynamicResource BrushAccentSoft}">
+              <TextBlock Classes="small" Text="MIT License · OSI approved" Foreground="{DynamicResource BrushAccentText}" />
+            </Border>
+          </Grid>
+          <TextBlock Text="{DynamicResource LicenseIntro}" TextWrapping="Wrap" />
+
+          <UniformGrid Columns="3" Margin="-6,0">
+            <Border Classes="card" Margin="6,0" Background="{DynamicResource BrushSurfaceRaised}">
+              <StackPanel Spacing="8">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                  <PathIcon Data="{StaticResource IconCheckCircle}" Width="18" Height="18" Foreground="{DynamicResource BrushSafe}" />
+                  <TextBlock Classes="h3" Text="{DynamicResource LicPermissions}" />
+                </StackPanel>
+                <TextBlock Classes="small" Text="{DynamicResource LicPermissionsText}" TextWrapping="Wrap" />
+              </StackPanel>
+            </Border>
+            <Border Classes="card" Margin="6,0" Background="{DynamicResource BrushSurfaceRaised}">
+              <StackPanel Spacing="8">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                  <PathIcon Data="{StaticResource IconInfo}" Width="18" Height="18" Foreground="{DynamicResource BrushAccentText}" />
+                  <TextBlock Classes="h3" Text="{DynamicResource LicConditions}" />
+                </StackPanel>
+                <TextBlock Classes="small" Text="{DynamicResource LicConditionsText}" TextWrapping="Wrap" />
+              </StackPanel>
+            </Border>
+            <Border Classes="card" Margin="6,0" Background="{DynamicResource BrushSurfaceRaised}">
+              <StackPanel Spacing="8">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                  <PathIcon Data="{StaticResource IconAlert}" Width="18" Height="18" Foreground="{DynamicResource BrushModerate}" />
+                  <TextBlock Classes="h3" Text="{DynamicResource LicLimitations}" />
+                </StackPanel>
+                <TextBlock Classes="small" Text="{DynamicResource LicLimitationsText}" TextWrapping="Wrap" />
+              </StackPanel>
+            </Border>
+          </UniformGrid>
+
+          <WrapPanel HorizontalAlignment="Center">
+            <Button Margin="4" Command="{Binding OpenLicensesFolderCommand}">
+              <ctl:IconLabel Icon="{StaticResource IconFolderOpen}" Text="{DynamicResource BtnOpenLicenses}" />
+            </Button>
+            <Button Margin="4" Command="{Binding ShowDocumentCommand}" CommandParameter="PRIVACY.md">
+              <ctl:IconLabel Icon="{StaticResource IconShield}" Text="{DynamicResource BtnPrivacy}" />
+            </Button>
+            <Button Margin="4" Command="{Binding ShowDocumentCommand}" CommandParameter="LEGAL-NOTICE.md">
+              <ctl:IconLabel Icon="{StaticResource IconDocument}" Text="{DynamicResource BtnLegalNotice}" />
+            </Button>
+            <Button Margin="4" Command="{Binding OpenMitLicenseCommand}">
+              <ctl:IconLabel Icon="{StaticResource IconOpenInNew}" Text="opensource.org" />
+            </Button>
+            <Button Margin="4" Command="{Binding ShowLicenseCommand}" CommandParameter="LICENSE.md">
+              <ctl:IconLabel Icon="{StaticResource IconDocument}" Text="{DynamicResource BtnShowLicense}" />
+            </Button>
+          </WrapPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- Third-party components -->
+      <Border Classes="card">
+        <StackPanel Spacing="12">
+          <TextBlock Classes="h2" Text="{DynamicResource HdrThirdParty}" />
+          <!-- Header and rows share identical fixed column widths so the columns line up -->
+          <Grid ColumnDefinitions="2*,90,1.4*,1.6*,72" Margin="0,4,0,2">
+            <TextBlock Classes="section column" Text="{DynamicResource ColComponent}" HorizontalAlignment="Left" />
+            <TextBlock Grid.Column="1" Classes="section column" Text="{DynamicResource ColVersion}" HorizontalAlignment="Left" />
+            <TextBlock Grid.Column="2" Classes="section column" Text="{DynamicResource ColLicense}" HorizontalAlignment="Left" />
+            <TextBlock Grid.Column="3" Classes="section column" Text="{DynamicResource ColUsage}" HorizontalAlignment="Left" />
+          </Grid>
+          <Border Classes="divider" />
+          <ItemsControl ItemsSource="{Binding ThirdParty}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Grid ColumnDefinitions="2*,90,1.4*,1.6*,72" Margin="0,0,0,6">
+                  <TextBlock Text="{Binding Name}" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Left" TextAlignment="Left" TextWrapping="Wrap" Margin="0,0,12,0" />
+                  <TextBlock Grid.Column="1" Text="{Binding Version}" Classes="muted" VerticalAlignment="Center" HorizontalAlignment="Left" TextAlignment="Left" />
+                  <TextBlock Grid.Column="2" Text="{Binding License}" VerticalAlignment="Center" HorizontalAlignment="Left" TextAlignment="Left" TextWrapping="Wrap" Margin="0,0,12,0" />
+                  <TextBlock Grid.Column="3" Text="{Binding Usage}" Classes="muted small" VerticalAlignment="Center" HorizontalAlignment="Left" TextAlignment="Left" TextWrapping="Wrap" Margin="0,0,12,0" />
+                  <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="2" HorizontalAlignment="Right">
+                    <Button Classes="icon small"
+                            Command="{Binding $parent[UserControl].DataContext.ShowThirdPartyCommand}"
+                            CommandParameter="{Binding}"
+                            ToolTip.Tip="{DynamicResource BtnShowLicense}">
+                      <PathIcon Data="{StaticResource IconDocument}" />
+                    </Button>
+                    <Button Classes="icon small"
+                            Command="{Binding $parent[UserControl].DataContext.OpenLinkCommand}"
+                            CommandParameter="{Binding Url}"
+                            ToolTip.Tip="{Binding Url}">
+                      <PathIcon Data="{StaticResource IconOpenInNew}" />
+                    </Button>
+                  </StackPanel>
+                </Grid>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="muted small" Text="{DynamicResource TrademarkText}" TextWrapping="Wrap" />
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

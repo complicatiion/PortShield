@@ -1,0 +1,216 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ctl="using:PortShield.App.Controls"
+             x:Class="PortShield.App.Views.ConnectionsView">
+
+  <UserControl.KeyBindings>
+    <KeyBinding Gesture="F5" Command="{Binding LoadCommand}" />
+    <KeyBinding Gesture="Ctrl+B" Command="{Binding BlockProgramCommand}" />
+  </UserControl.KeyBindings>
+
+  <DockPanel>
+    <!-- Command bar -->
+    <Border DockPanel.Dock="Top" Classes="commandbar" Margin="0,0,0,12">
+      <Grid ColumnDefinitions="*,Auto">
+        <WrapPanel>
+          <Button Classes="cmd" Command="{Binding LoadCommand}" ToolTip.Tip="F5">
+            <ctl:IconLabel Icon="{StaticResource IconRefresh}" Text="{DynamicResource BtnRefresh}" />
+          </Button>
+          <Border Classes="cmdsep" />
+          <Button Classes="cmd block" Command="{Binding BlockProgramCommand}" IsEnabled="{Binding HasSelection}" ToolTip.Tip="Ctrl+B">
+            <ctl:IconLabel Icon="{StaticResource IconCancel}" Text="{DynamicResource BtnBlockProgram}" />
+          </Button>
+          <Button Classes="cmd allow" Command="{Binding AllowProgramCommand}" IsEnabled="{Binding HasSelection}">
+            <ctl:IconLabel Icon="{StaticResource IconCheckCircle}" Text="{DynamicResource BtnAllowProgram}" />
+          </Button>
+          <Border Classes="cmdsep" />
+          <Button Classes="cmd" Command="{Binding CopyAddressCommand}" IsEnabled="{Binding HasSelection}">
+            <ctl:IconLabel Icon="{StaticResource IconCopy}" Text="{DynamicResource BtnCopyAddress}" />
+          </Button>
+          <Button Classes="cmd" Command="{Binding OpenLocationCommand}" IsEnabled="{Binding HasSelection}">
+            <ctl:IconLabel Icon="{StaticResource IconFolderOpen}" Text="{DynamicResource MenuOpenLocation}" />
+          </Button>
+        </WrapPanel>
+        <!-- Recording state (audit policy) and switch -->
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center" Margin="12,0,6,0">
+          <Border Classes="pill" Background="{DynamicResource BrushSafeSoft}" IsVisible="{Binding RecordingOn}" VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal" Spacing="6">
+              <PathIcon Data="{StaticResource IconCheckCircle}" Width="13" Height="13" Foreground="{DynamicResource BrushSafe}" />
+              <TextBlock Classes="small" FontWeight="SemiBold" Foreground="{DynamicResource BrushSafe}" Text="{DynamicResource PillRecordingOn}" VerticalAlignment="Center" />
+            </StackPanel>
+          </Border>
+          <Border Classes="pill neutral" IsVisible="{Binding RecordingOff}" VerticalAlignment="Center">
+            <TextBlock Text="{DynamicResource PillRecordingOff}" />
+          </Border>
+          <Border Classes="pill neutral" IsVisible="{Binding RecordingUnknown}" VerticalAlignment="Center">
+            <TextBlock Text="{DynamicResource PillRecordingUnknown}" />
+          </Border>
+          <Button Classes="primary" Command="{Binding ToggleRecordingCommand}" IsVisible="{Binding !RecordingOn}">
+            <ctl:IconLabel Icon="{StaticResource IconPlay}" Text="{Binding RecordingButton}" />
+          </Button>
+          <Button Command="{Binding ToggleRecordingCommand}" IsVisible="{Binding RecordingOn}">
+            <ctl:IconLabel Icon="{StaticResource IconStop}" Text="{Binding RecordingButton}" />
+          </Button>
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <!-- Recording off: what it does -->
+    <Border DockPanel.Dock="Top" Classes="notice" Margin="0,0,0,12" IsVisible="{Binding !RecordingOn}">
+      <Grid ColumnDefinitions="Auto,*">
+        <PathIcon Data="{StaticResource IconInfo}" Width="18" Height="18" Foreground="{DynamicResource BrushInfo}" Margin="0,0,10,0" VerticalAlignment="Top" />
+        <TextBlock Grid.Column="1" Text="{DynamicResource ConnectionsRecordingHint}" TextWrapping="Wrap" />
+      </Grid>
+    </Border>
+
+    <!-- Counters -->
+    <UniformGrid DockPanel.Dock="Top" Columns="4" Margin="-5,0,-5,12">
+      <Border Classes="card" Margin="5,0" Padding="14,10">
+        <StackPanel>
+          <TextBlock Classes="kpi" Text="{Binding EventCount}" Foreground="{DynamicResource BrushDeep}" />
+          <TextBlock Classes="small" FontWeight="SemiBold" Foreground="{DynamicResource BrushDeep}" Text="{DynamicResource KpiBlockedEvents}" TextWrapping="Wrap" />
+        </StackPanel>
+      </Border>
+      <Border Classes="card" Margin="5,0" Padding="14,10">
+        <StackPanel>
+          <TextBlock Classes="kpi" Text="{Binding InternetCount}" Foreground="{DynamicResource BrushModerate}" />
+          <TextBlock Classes="small" FontWeight="SemiBold" Foreground="{DynamicResource BrushModerate}" Text="{DynamicResource KpiInternetEvents}" TextWrapping="Wrap" />
+        </StackPanel>
+      </Border>
+      <Border Classes="card" Margin="5,0" Padding="14,10">
+        <StackPanel>
+          <TextBlock Classes="kpi" Text="{Binding ProgramCount}" Foreground="{DynamicResource BrushAccentText}" />
+          <TextBlock Classes="small" FontWeight="SemiBold" Foreground="{DynamicResource BrushAccentText}" Text="{DynamicResource KpiPrograms}" TextWrapping="Wrap" />
+        </StackPanel>
+      </Border>
+      <Border Classes="card" Margin="5,0" Padding="14,10">
+        <StackPanel>
+          <TextBlock Classes="kpi" Text="{Binding RemoteCount}" Foreground="{DynamicResource BrushInfo}" />
+          <TextBlock Classes="small" FontWeight="SemiBold" Foreground="{DynamicResource BrushInfo}" Text="{DynamicResource KpiRemotes}" TextWrapping="Wrap" />
+        </StackPanel>
+      </Border>
+    </UniformGrid>
+
+    <!-- Search, filters, counters -->
+    <Grid DockPanel.Dock="Top" ColumnDefinitions="Auto,Auto,Auto,Auto,*,Auto" Margin="0,0,0,10">
+      <TextBox Text="{Binding Search}" Watermark="{DynamicResource WatermarkSearchConnections}" Width="300">
+        <TextBox.InnerLeftContent>
+          <PathIcon Data="{StaticResource IconMagnify}" Width="16" Height="16" Margin="10,0,0,0" Opacity="0.7" />
+        </TextBox.InnerLeftContent>
+      </TextBox>
+      <ComboBox Grid.Column="1" ItemsSource="{Binding Ranges}" SelectedIndex="{Binding RangeIndex}" MinWidth="170" Margin="10,0,0,0" VerticalAlignment="Center" />
+      <ComboBox Grid.Column="2" ItemsSource="{Binding DirectionFilters}" SelectedIndex="{Binding DirectionIndex}" MinWidth="150" Margin="10,0" VerticalAlignment="Center" />
+      <CheckBox Grid.Column="3" IsChecked="{Binding InternetOnly}" Content="{DynamicResource LblInternetOnly}" VerticalAlignment="Center" />
+      <StackPanel Grid.Column="5" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+        <Border Classes="pill neutral" IsVisible="{Binding HitLimit}" ToolTip.Tip="{DynamicResource TipEventLimit}">
+          <TextBlock Text="{DynamicResource PillEventLimit}" />
+        </Border>
+        <Border Classes="pill accent" IsVisible="{Binding HasSelection}">
+          <TextBlock Text="{Binding SelectionText}" />
+        </Border>
+        <Border Classes="pill neutral">
+          <TextBlock Text="{Binding CountText}" />
+        </Border>
+      </StackPanel>
+    </Grid>
+
+    <Panel>
+      <DataGrid x:Name="ConnectionsGrid" Classes="rules" ItemsSource="{Binding Rows}" IsVisible="{Binding HasRows}">
+        <DataGrid.ContextMenu>
+          <ContextMenu>
+            <MenuItem Header="{DynamicResource BtnBlockProgram}" Command="{Binding BlockProgramCommand}" IsEnabled="{Binding HasSelection}" InputGesture="Ctrl+B">
+              <MenuItem.Icon><PathIcon Data="{StaticResource IconCancel}" Foreground="{DynamicResource BrushDeep}" /></MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="{DynamicResource BtnAllowProgram}" Command="{Binding AllowProgramCommand}" IsEnabled="{Binding HasSelection}">
+              <MenuItem.Icon><PathIcon Data="{StaticResource IconCheckCircle}" Foreground="{DynamicResource BrushSafe}" /></MenuItem.Icon>
+            </MenuItem>
+            <Separator />
+            <MenuItem Header="{DynamicResource BtnCopyAddress}" Command="{Binding CopyAddressCommand}" IsEnabled="{Binding HasSelection}">
+              <MenuItem.Icon><PathIcon Data="{StaticResource IconCopy}" /></MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="{DynamicResource MenuOpenLocation}" Command="{Binding OpenLocationCommand}" IsEnabled="{Binding HasSelection}">
+              <MenuItem.Icon><PathIcon Data="{StaticResource IconFolderOpen}" /></MenuItem.Icon>
+            </MenuItem>
+            <Separator />
+            <MenuItem Header="{DynamicResource MenuSelectAll}" Command="{Binding SelectAllCommand}" InputGesture="Ctrl+A">
+              <MenuItem.Icon><PathIcon Data="{StaticResource IconSelectAll}" /></MenuItem.Icon>
+            </MenuItem>
+          </ContextMenu>
+        </DataGrid.ContextMenu>
+        <DataGrid.Columns>
+          <DataGridTemplateColumn Width="2.4*" SortMemberPath="FileName">
+            <DataGridTemplateColumn.Header>
+              <TextBlock Text="{DynamicResource ColProgram}" />
+            </DataGridTemplateColumn.Header>
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <StackPanel VerticalAlignment="Center" Margin="0,0,10,0" ToolTip.Tip="{Binding Tooltip}">
+                  <TextBlock Text="{Binding FileName}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                  <TextBlock Classes="muted small mono" Text="{Binding Folder}" TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTemplateColumn Width="110" SortMemberPath="DirectionText">
+            <DataGridTemplateColumn.Header>
+              <TextBlock Text="{DynamicResource ColDirection}" />
+            </DataGridTemplateColumn.Header>
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                  <PathIcon Data="{StaticResource IconArrowOut}" Width="13" Height="13" IsVisible="{Binding IsOutbound}" />
+                  <PathIcon Data="{StaticResource IconArrowIn}" Width="13" Height="13" IsVisible="{Binding !IsOutbound}" />
+                  <TextBlock Text="{Binding DirectionText}" VerticalAlignment="Center" />
+                </StackPanel>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTemplateColumn Width="1.6*" SortMemberPath="Remote">
+            <DataGridTemplateColumn.Header>
+              <TextBlock Text="{DynamicResource ColRemote}" />
+            </DataGridTemplateColumn.Header>
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <StackPanel VerticalAlignment="Center" Margin="0,0,10,0">
+                  <TextBlock Classes="mono" Text="{Binding Remote}" TextTrimming="CharacterEllipsis" />
+                  <TextBlock Classes="muted small" Text="{Binding KindText}" />
+                </StackPanel>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTextColumn Binding="{Binding ProtocolText}" Width="90">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{DynamicResource ColProtocol}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+          <DataGridTemplateColumn Width="90" SortMemberPath="Count">
+            <DataGridTemplateColumn.Header>
+              <TextBlock Text="{DynamicResource ColCount}" />
+            </DataGridTemplateColumn.Header>
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <Border Classes="badge block" HorizontalAlignment="Left" VerticalAlignment="Center">
+                  <TextBlock Text="{Binding Count}" />
+                </Border>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTextColumn Binding="{Binding LastText}" Width="150" SortMemberPath="Last">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{DynamicResource ColLastSeen}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+        </DataGrid.Columns>
+      </DataGrid>
+
+      <!-- Nothing recorded (yet) -->
+      <Border Classes="card" IsVisible="{Binding IsEmpty}" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="600" Padding="32,28">
+        <StackPanel Spacing="14" HorizontalAlignment="Center">
+          <PathIcon Data="{StaticResource IconLan}" Width="40" Height="40" Foreground="{DynamicResource BrushAccentText}" HorizontalAlignment="Center" />
+          <TextBlock Classes="h2" Text="{DynamicResource ConnectionsEmptyTitle}" HorizontalAlignment="Center" TextAlignment="Center" />
+          <TextBlock Classes="muted" Text="{DynamicResource ConnectionsEmptyText}" TextWrapping="Wrap" TextAlignment="Center" />
+        </StackPanel>
+      </Border>
+    </Panel>
+  </DockPanel>
+</UserControl>

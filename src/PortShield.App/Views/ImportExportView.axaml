@@ -1,0 +1,149 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ctl="using:PortShield.App.Controls"
+             x:Class="PortShield.App.Views.ImportExportView">
+  <ScrollViewer>
+    <Grid ColumnDefinitions="1.15*,18,*" MaxWidth="1320" HorizontalAlignment="Stretch">
+
+      <!-- Export -->
+      <Border Classes="card" VerticalAlignment="Top">
+        <StackPanel Spacing="12">
+          <Grid ColumnDefinitions="Auto,*">
+            <PathIcon Data="{StaticResource IconExport}" Width="20" Height="20" Foreground="{DynamicResource BrushAccentText}" Margin="0,0,8,0" />
+            <TextBlock Grid.Column="1" Classes="h2" Text="{DynamicResource HdrExport}" />
+          </Grid>
+
+          <Grid ColumnDefinitions="Auto,*,Auto">
+            <TextBlock Classes="label" Text="{DynamicResource LblSource}" VerticalAlignment="Center" Margin="0,0,12,0" />
+            <ComboBox Grid.Column="1" ItemsSource="{Binding Sources}" SelectedIndex="{Binding SourceIndex}" HorizontalAlignment="Stretch" />
+            <Border Grid.Column="2" Classes="pill accent" Margin="10,0,0,0">
+              <TextBlock Text="{Binding SourceCountText}" />
+            </Border>
+          </Grid>
+
+          <TextBlock Classes="section" Text="{DynamicResource LblFormat}" Margin="0,4,0,0" />
+          <ItemsControl ItemsSource="{Binding Formats}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <RadioButton Classes="formatcard" GroupName="format" IsChecked="{Binding IsSelected}">
+                  <Grid ColumnDefinitions="Auto,*,Auto">
+                    <PathIcon Data="{Binding Icon}" Width="20" Height="20" Foreground="{DynamicResource BrushAccentText}" Margin="0,0,12,0" VerticalAlignment="Center" />
+                    <StackPanel Grid.Column="1" Spacing="2">
+                      <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                      <TextBlock Classes="muted small" Text="{Binding Description}" TextWrapping="Wrap" />
+                    </StackPanel>
+                    <Border Grid.Column="2" Classes="badge" Margin="10,0,0,0" VerticalAlignment="Center">
+                      <TextBlock Classes="mono" Text="{Binding Extension}" />
+                    </Border>
+                  </Grid>
+                </RadioButton>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+
+          <Grid Classes="settings" ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto" Margin="0,4,0,0">
+            <StackPanel>
+              <TextBlock Text="{DynamicResource LblPortablePaths}" />
+              <TextBlock Classes="muted small" Text="{DynamicResource LblPortablePathsHint}" TextWrapping="Wrap" />
+            </StackPanel>
+            <ToggleSwitch Grid.Column="1" IsChecked="{Binding PortablePaths}" OnContent="" OffContent="" />
+            <StackPanel Grid.Row="1">
+              <TextBlock Text="{DynamicResource LblIncludeHashes}" />
+              <TextBlock Classes="muted small" Text="{DynamicResource LblIncludeHashesHint}" TextWrapping="Wrap" />
+            </StackPanel>
+            <ToggleSwitch Grid.Row="1" Grid.Column="1" IsChecked="{Binding IncludeHashes}" OnContent="" OffContent="" />
+            <TextBlock Grid.Row="2" Text="{DynamicResource LblCsvDelimiter}" />
+            <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Delimiters}" SelectedIndex="{Binding DelimiterIndex}" MinWidth="170" HorizontalAlignment="Right" />
+          </Grid>
+
+          <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right">
+            <Button Command="{Binding CopyCommand}">
+              <ctl:IconLabel Icon="{StaticResource IconCopy}" Text="{DynamicResource BtnCopyClipboard}" />
+            </Button>
+            <Button Classes="primary" Command="{Binding ExportCommand}">
+              <ctl:IconLabel Icon="{StaticResource IconSave}" Text="{DynamicResource BtnExportFile}" />
+            </Button>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <StackPanel Grid.Column="2" Spacing="18">
+        <!-- Import -->
+        <Border Classes="card">
+          <StackPanel Spacing="12">
+            <Grid ColumnDefinitions="Auto,*">
+              <PathIcon Data="{StaticResource IconImport}" Width="20" Height="20" Foreground="{DynamicResource BrushAccentText}" Margin="0,0,8,0" />
+              <TextBlock Grid.Column="1" Classes="h2" Text="{DynamicResource HdrImport}" />
+            </Grid>
+            <Button Classes="primary" HorizontalAlignment="Right" Command="{Binding ImportCommand}">
+              <ctl:IconLabel Icon="{StaticResource IconImport}" Text="{DynamicResource BtnImportFile}" />
+            </Button>
+          </StackPanel>
+        </Border>
+
+        <!-- Rule sets: move PortShield to another PC -->
+        <Border Classes="card">
+          <StackPanel Spacing="12">
+            <Grid ColumnDefinitions="Auto,*">
+              <PathIcon Data="{StaticResource IconBundle}" Width="20" Height="20" Foreground="{DynamicResource BrushAccentText}" Margin="0,0,8,0" />
+              <TextBlock Grid.Column="1" Classes="h2" Text="{DynamicResource HdrRuleSetTransfer}" />
+            </Grid>
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Text="{DynamicResource LblIncludeCurrentRules}" TextWrapping="Wrap" VerticalAlignment="Center" />
+              <ToggleSwitch Grid.Column="1" IsChecked="{Binding IncludeCurrentRules}" OnContent="" OffContent="" MinWidth="0" />
+            </Grid>
+            <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right">
+              <Button Command="{Binding ImportRuleSetsCommand}">
+                <ctl:IconLabel Icon="{StaticResource IconImport}" Text="{DynamicResource BtnImportRuleSets}" />
+              </Button>
+              <Button Command="{Binding ExportRuleSetsCommand}">
+                <ctl:IconLabel Icon="{StaticResource IconExport}" Text="{DynamicResource BtnExportRuleSets}" />
+              </Button>
+            </StackPanel>
+          </StackPanel>
+        </Border>
+
+        <!-- Complete Windows Firewall policy -->
+        <Border Classes="card">
+          <StackPanel Spacing="12">
+            <Grid ColumnDefinitions="Auto,*">
+              <PathIcon Data="{StaticResource IconWall}" Width="20" Height="20" Foreground="{DynamicResource BrushAccentText}" Margin="0,0,8,0" />
+              <TextBlock Grid.Column="1" Classes="h2" Text="{DynamicResource HdrPolicy}" />
+            </Grid>
+            <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right">
+              <Button Command="{Binding ImportPolicyCommand}">
+                <ctl:IconLabel Icon="{StaticResource IconImport}" Text="{DynamicResource BtnImportPolicy}" />
+              </Button>
+              <Button Command="{Binding ExportPolicyCommand}">
+                <ctl:IconLabel Icon="{StaticResource IconExport}" Text="{DynamicResource BtnExportPolicy}" />
+              </Button>
+            </StackPanel>
+          </StackPanel>
+        </Border>
+
+        <!-- Using the lists in other security products -->
+        <Border Classes="card">
+          <StackPanel Spacing="10">
+            <Grid ColumnDefinitions="Auto,*">
+              <PathIcon Data="{StaticResource IconShield}" Width="20" Height="20" Foreground="{DynamicResource BrushAccentText}" Margin="0,0,8,0" />
+              <TextBlock Grid.Column="1" Classes="h2" Text="{DynamicResource HdrOtherProducts}" />
+            </Grid>
+            <TextBlock Classes="muted small" Text="{DynamicResource OtherProductsIntro}" TextWrapping="Wrap" />
+            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+              <TextBlock Classes="small" FontWeight="SemiBold" Text="Intune / Defender" Margin="0,0,12,6" />
+              <TextBlock Grid.Column="1" Classes="small" Text="{DynamicResource OtherIntune}" TextWrapping="Wrap" Margin="0,0,0,6" />
+              <TextBlock Grid.Row="1" Classes="small" FontWeight="SemiBold" Text="{DynamicResource OtherGpoName}" Margin="0,0,12,6" />
+              <TextBlock Grid.Row="1" Grid.Column="1" Classes="small" Text="{DynamicResource OtherGpo}" TextWrapping="Wrap" Margin="0,0,0,6" />
+              <TextBlock Grid.Row="2" Classes="small" FontWeight="SemiBold" Text="Bitdefender" Margin="0,0,12,6" />
+              <TextBlock Grid.Row="2" Grid.Column="1" Classes="small" Text="{DynamicResource OtherBitdefender}" TextWrapping="Wrap" Margin="0,0,0,6" />
+              <TextBlock Grid.Row="3" Classes="small" FontWeight="SemiBold" Text="ESET" Margin="0,0,12,6" />
+              <TextBlock Grid.Row="3" Grid.Column="1" Classes="small" Text="{DynamicResource OtherEset}" TextWrapping="Wrap" Margin="0,0,0,6" />
+              <TextBlock Grid.Row="4" Classes="small" FontWeight="SemiBold" Text="{DynamicResource OtherGenericName}" Margin="0,0,12,0" />
+              <TextBlock Grid.Row="4" Grid.Column="1" Classes="small" Text="{DynamicResource OtherGeneric}" TextWrapping="Wrap" />
+            </Grid>
+          </StackPanel>
+        </Border>
+      </StackPanel>
+    </Grid>
+  </ScrollViewer>
+</UserControl>

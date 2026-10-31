@@ -1,0 +1,163 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctl="using:PortShield.App.Controls"
+        x:Class="PortShield.App.Views.MainWindow"
+        Title="{Binding WindowTitle}"
+        Icon="/Assets/portshield.ico"
+        Background="{DynamicResource BrushBgApp}"
+        Width="1320" Height="860"
+        MinWidth="1020" MinHeight="640"
+        WindowStartupLocation="CenterScreen">
+
+  <Window.Resources>
+    <!-- Sidebar entry: marker, icon (counter on its top right corner), title -->
+    <DataTemplate x:Key="NavItemTemplate">
+      <Grid ColumnDefinitions="Auto,Auto,*" ToolTip.Tip="{Binding Tip}">
+        <Border Classes="marker" />
+        <Panel Grid.Column="1" Width="20" Height="20">
+          <PathIcon Data="{Binding Icon}" Width="20" Height="20" />
+          <Panel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-8,-14,0">
+            <Border Classes="navbadge" IsVisible="{Binding HasBadge}">
+              <TextBlock Text="{Binding BadgeText}" />
+            </Border>
+          </Panel>
+        </Panel>
+        <TextBlock Grid.Column="2" Text="{Binding Title}" VerticalAlignment="Center" Margin="14,0,0,0"
+                   IsVisible="{Binding !$parent[Window].DataContext.IsSidebarCollapsed}" TextTrimming="CharacterEllipsis" />
+      </Grid>
+    </DataTemplate>
+  </Window.Resources>
+
+  <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,*">
+
+    <!-- Sidebar (collapsible via the logo, expanded by default) -->
+    <Border Grid.RowSpan="2"
+            Classes="sidebar"
+            Classes.collapsed="{Binding IsSidebarCollapsed}"
+            Width="{Binding SidebarWidth}"
+            Background="{DynamicResource BrushBgSidebar}"
+            BorderBrush="{DynamicResource BrushBorder}"
+            BorderThickness="0,0,1,0">
+      <DockPanel>
+        <Button DockPanel.Dock="Top"
+                Classes="logo"
+                Margin="10,12,10,14"
+                Command="{Binding ToggleSidebarCommand}"
+                ToolTip.Tip="{DynamicResource TipToggleSidebar}">
+          <StackPanel Orientation="Horizontal" Spacing="12">
+            <Panel Width="34" Height="34">
+              <Border Classes="logoglow" Margin="2" />
+              <Border Classes="logo" />
+            </Panel>
+            <TextBlock Text="PortShield" FontSize="20" FontWeight="Bold" VerticalAlignment="Center"
+                       IsVisible="{Binding !IsSidebarCollapsed}" />
+          </StackPanel>
+        </Button>
+
+        <!-- Bottom: settings and about, separated by a line -->
+        <ListBox DockPanel.Dock="Bottom"
+                 Classes="nav"
+                 Margin="10,0,10,14"
+                 ItemsSource="{Binding BottomGroup.Items}"
+                 SelectedItem="{Binding BottomGroup.Selected}"
+                 ItemTemplate="{StaticResource NavItemTemplate}" />
+        <Border DockPanel.Dock="Bottom" Classes="divider" Margin="16,8" />
+
+        <!-- Kill switch always at hand -->
+        <!-- Kill switch: accent colour, completely red while active -->
+        <Button DockPanel.Dock="Bottom" Classes="cmd killnav" Classes.on="{Binding KillSwitchOn}" Margin="10,0,10,4"
+                HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                Command="{Binding ToggleKillSwitchCommand}" ToolTip.Tip="{DynamicResource TipKillSwitch}">
+          <StackPanel Orientation="Horizontal" Spacing="14" Margin="2,2">
+            <PathIcon Data="{StaticResource IconPower}" Width="20" Height="20" />
+            <TextBlock Text="{DynamicResource NavKillSwitch}" VerticalAlignment="Center" FontWeight="SemiBold" IsVisible="{Binding !IsSidebarCollapsed}" />
+          </StackPanel>
+        </Button>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+          <ItemsControl ItemsSource="{Binding NavGroups}" Margin="10,0,10,0">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <StackPanel IsVisible="{Binding IsVisible}">
+                  <Border Classes="divider navdivider" IsVisible="{Binding HasTitle}" />
+                  <TextBlock Classes="section" Text="{Binding Title}" Margin="12,10,0,4"
+                             IsVisible="{Binding HasTitle}" />
+                  <ListBox Classes="nav"
+                           ItemsSource="{Binding Items}"
+                           SelectedItem="{Binding Selected}"
+                           ItemTemplate="{StaticResource NavItemTemplate}" />
+                </StackPanel>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </ScrollViewer>
+      </DockPanel>
+    </Border>
+
+    <!-- Header: page icon and title, state pills -->
+    <Border Grid.Column="1"
+            Padding="28,16,24,14"
+            BorderBrush="{DynamicResource BrushBorder}"
+            BorderThickness="0,0,0,1">
+      <Grid ColumnDefinitions="Auto,*,Auto">
+        <PathIcon Data="{Binding CurrentPageIcon}" Width="24" Height="24" Margin="0,0,12,0"
+                  Foreground="{DynamicResource BrushAccentText}" VerticalAlignment="Center" />
+        <TextBlock Grid.Column="1" Classes="h1" Text="{Binding CurrentPage.Title}" VerticalAlignment="Center" />
+        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+          <StackPanel Orientation="Horizontal" Spacing="8" IsVisible="{Binding IsBusy}" VerticalAlignment="Center">
+            <ProgressBar IsIndeterminate="True" Width="90" VerticalAlignment="Center" />
+            <TextBlock Classes="muted small" Text="{DynamicResource StatusWorking}" VerticalAlignment="Center" />
+          </StackPanel>
+          <Border Classes="pill" Background="{DynamicResource BrushDeepSoft}" IsVisible="{Binding KillSwitchOn}">
+            <StackPanel Orientation="Horizontal" Spacing="6">
+              <PathIcon Data="{StaticResource IconPower}" Width="14" Height="14" Foreground="{DynamicResource BrushDeep}" />
+              <TextBlock Text="{DynamicResource PillKillSwitch}" Classes="small" Foreground="{DynamicResource BrushDeep}" FontWeight="SemiBold" VerticalAlignment="Center" />
+            </StackPanel>
+          </Border>
+          <Border Classes="pill" Background="{DynamicResource BrushModerateSoft}" IsVisible="{Binding WhitelistOn}">
+            <StackPanel Orientation="Horizontal" Spacing="6">
+              <PathIcon Data="{StaticResource IconShieldLock}" Width="14" Height="14" Foreground="{DynamicResource BrushModerate}" />
+              <TextBlock Text="{DynamicResource PillWhitelist}" Classes="small" Foreground="{DynamicResource BrushModerate}" FontWeight="SemiBold" VerticalAlignment="Center" />
+            </StackPanel>
+          </Border>
+          <Border Classes="pill" Background="{DynamicResource BrushSafeSoft}" IsVisible="{Binding IsElevated}">
+            <StackPanel Orientation="Horizontal" Spacing="6">
+              <PathIcon Data="{StaticResource IconShieldCheck}" Width="14" Height="14" Foreground="{DynamicResource BrushSafe}" />
+              <TextBlock Text="{Binding AdminPillText}" Classes="small" Foreground="{DynamicResource BrushSafe}" FontWeight="SemiBold" VerticalAlignment="Center" />
+            </StackPanel>
+          </Border>
+          <Border Classes="pill" Background="{DynamicResource BrushDeepSoft}" IsVisible="{Binding !IsElevated}">
+            <StackPanel Orientation="Horizontal" Spacing="6">
+              <PathIcon Data="{StaticResource IconShieldAlert}" Width="14" Height="14" Foreground="{DynamicResource BrushDeep}" />
+              <TextBlock Text="{Binding AdminPillText}" Classes="small" Foreground="{DynamicResource BrushDeep}" FontWeight="SemiBold" VerticalAlignment="Center" />
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <!-- Content -->
+    <Grid Grid.Row="1" Grid.Column="1">
+      <ctl:PageHost Page="{Binding CurrentPage}" Margin="28,20,24,20" />
+
+      <!-- Toast -->
+      <Border x:Name="ToastHost"
+              Classes="toast"
+              Classes.error="{Binding ToastIsError}"
+              IsVisible="{Binding HasToast}"
+              HorizontalAlignment="Right"
+              VerticalAlignment="Bottom"
+              Margin="24,0,24,22"
+              MinWidth="240"
+              MaxWidth="520">
+        <Grid ColumnDefinitions="Auto,*,Auto">
+          <PathIcon Classes="toastIcon" Width="18" Height="18" Margin="0,0,12,0" VerticalAlignment="Center" />
+          <TextBlock Grid.Column="1" Text="{Binding Toast}" TextWrapping="Wrap" VerticalAlignment="Center" LineHeight="20" />
+          <Button Grid.Column="2" Classes="icon small" Margin="12,0,0,0" VerticalAlignment="Center" Command="{Binding CloseToastCommand}">
+            <PathIcon Data="{StaticResource IconClose}" />
+          </Button>
+        </Grid>
+      </Border>
+    </Grid>
+  </Grid>
+</Window>
