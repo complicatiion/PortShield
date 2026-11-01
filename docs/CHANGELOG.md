@@ -21,6 +21,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versioning: [S
 - Scan: start text without “and lets PortShield adopt them”.
 - Snapshots: info text removed.
 
+### Fixed
+
+- Installer: `MinVersion` was `10.0.44393` (typo) – setup refused every Windows version with “not supported”. Now `10.0.14393` (Windows 10 1607 / Server 2016).
+
 ## [0.0.3] – 2026-10-31
 
 ### Added
