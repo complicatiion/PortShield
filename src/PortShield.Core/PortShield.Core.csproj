@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>PortShield.Core</RootNamespace>
+    <AssemblyName>PortShield.Core</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="PortShield.Core.Tests" />
+  </ItemGroup>
+
+</Project>
